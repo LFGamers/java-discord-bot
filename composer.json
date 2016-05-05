@@ -1,0 +1,23 @@
+{
+    "name": "lfgamers/discord-bot",
+    "description": "Official LFGamers Discord bot",
+    "type": "project",
+    "require": {
+        "lfgamers/discord-base-bot": "dev-master",
+        "doctrine/orm": "^2.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "LFGamers\\Discord\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Aaron Scherer",
+            "email": "aequasi@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable":     true
+}
