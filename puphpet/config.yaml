@@ -6,7 +6,7 @@ vagrantfile:
                 box: puphpet/ubuntu1404-x64
                 box_url: puphpet/ubuntu1404-x64
                 box_version: '0'
-                chosen_virtualizer: parallels
+                chosen_virtualizer: virtualbox
                 virtualizers:
                     virtualbox:
                         modifyvm:
