@@ -11,6 +11,7 @@
 
 use Discord\Base\Bot;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\ModerationModule\ModerationModule;
 use LFGamers\Discord\ServerManager;
 
@@ -30,6 +31,7 @@ $bot = Bot::create(
             'token'                => getenv('TOKEN'),
             'prefix'               => '%',
             'status'               => 'https://lfgame.rs',
+            'server_class'         => Server::class,
             'server_manager_class' => ServerManager::class
         ],
         'cache'      => [

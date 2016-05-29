@@ -13,21 +13,17 @@ namespace LFGamers\Discord\ModerationModule\BotCommand;
 
 use Discord\Base\AbstractBotCommand;
 use Discord\Base\Request;
-use Discord\Parts\Channel\Channel;
-use Discord\Parts\Channel\Message;
 use Discord\Parts\User\Member;
 use Doctrine\Common\Collections\ArrayCollection;
-use LFGamers\Discord\Helper\ChannelHelper;
 use LFGamers\Discord\Model\Rule;
-use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\Model\Strike;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
  *
- * RuleBotCommand Class
+ * ExampleBotCommand Class
  */
-class StrikesBotCommand extends AbstractBotCommand
+class ExampleBotCommand extends AbstractBotCommand
 {
     /**
      * @return void
@@ -69,6 +65,8 @@ EOF
         if ($this->hasRecentStrike($strikes)) {
             $request->sendMessage($user, 'Someone already gave a strike to that user recently.');
         }
+        
+        $request->reply($request->renderTemplate('@Moderation/example/example.md.twig'));
     }
 
     /**
