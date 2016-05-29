@@ -4,7 +4,10 @@
     "type": "project",
     "require": {
         "lfgamers/discord-base-bot": "dev-master",
-        "doctrine/orm": "^2.5"
+        "doctrine/orm": "^2.5",
+        "cache/chain-adapter": "^0.3.0",
+        "cache/redis-adapter": "^0.4.1",
+        "cache/array-adapter": "^0.4.0"
     },
     "autoload": {
         "psr-4": {

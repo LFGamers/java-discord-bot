@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3971d974141881c58a6f25c6787ef629",
-    "content-hash": "3bf080dbc19161fb4aaa4f7f9f37795c",
+    "hash": "bfe4699126a61608a6142f01b2fa9c2a",
+    "content-hash": "e6eca0a59f47ee17bed6e6fc22a1f435",
     "packages": [
         {
             "name": "TrafficCophp/ByteBuffer",
@@ -312,6 +312,70 @@
             "time": "2016-02-25 08:03:59"
         },
         {
+            "name": "cache/chain-adapter",
+            "version": "0.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/chain-adapter.git",
+                "reference": "1769b7583dcedbbc74bb347c9d207a30e2f2cbd9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/chain-adapter/zipball/1769b7583dcedbbc74bb347c9d207a30e2f2cbd9",
+                "reference": "1769b7583dcedbbc74bb347c9d207a30e2f2cbd9",
+                "shasum": ""
+            },
+            "require": {
+                "cache/adapter-common": "^0.3",
+                "cache/taggable-cache": "^0.4",
+                "php": "^5.5|^7.0",
+                "psr/cache": "^1.0"
+            },
+            "provide": {
+                "psr/cache-implementation": "^1.0"
+            },
+            "require-dev": {
+                "cache/array-adapter": "@stable",
+                "cache/integration-tests": "^0.9",
+                "cache/predis-adapter": "@stable",
+                "phpunit/phpunit": "^4.0|^5.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cache\\Adapter\\Chain\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/nyholm"
+                }
+            ],
+            "description": "A PSR-6 cache implementation using chain. This implementation supports tags",
+            "homepage": "https://github.com/php-cache/chain-adapter",
+            "keywords": [
+                "Chain",
+                "cache",
+                "psr-6",
+                "tag"
+            ],
+            "time": "2016-02-25 08:03:59"
+        },
+        {
             "name": "cache/hierarchical-cache",
             "version": "0.2.1",
             "source": {
@@ -369,6 +433,73 @@
                 "tag"
             ],
             "time": "2016-02-25 08:03:59"
+        },
+        {
+            "name": "cache/redis-adapter",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-cache/redis-adapter.git",
+                "reference": "bdd959080d1627f8ed35fe5feafa8a05160ecf52"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-cache/redis-adapter/zipball/bdd959080d1627f8ed35fe5feafa8a05160ecf52",
+                "reference": "bdd959080d1627f8ed35fe5feafa8a05160ecf52",
+                "shasum": ""
+            },
+            "require": {
+                "cache/adapter-common": "^0.3",
+                "cache/hierarchical-cache": "^0.2",
+                "cache/taggable-cache": "^0.4",
+                "php": "^5.5|^7.0",
+                "psr/cache": "^1.0"
+            },
+            "provide": {
+                "psr/cache-implementation": "^1.0"
+            },
+            "require-dev": {
+                "cache/integration-tests": "^0.9",
+                "phpunit/phpunit": "^4.0|^5.1"
+            },
+            "suggest": {
+                "ext-redis": "The extension required to use this pool."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cache\\Adapter\\Redis\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Scherer",
+                    "email": "aequasi@gmail.com",
+                    "homepage": "https://github.com/aequasi"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/nyholm"
+                }
+            ],
+            "description": "A PSR-6 cache implementation using Redis (PhpRedis). This implementation supports tags",
+            "homepage": "http://www.php-cache.com/en/latest/",
+            "keywords": [
+                "cache",
+                "phpredis",
+                "psr-6",
+                "redis",
+                "tag"
+            ],
+            "time": "2016-03-01 21:01:28"
         },
         {
             "name": "cache/taggable-cache",
@@ -1619,7 +1750,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/57c64ce2130b83398fd5a33f4368a718e00a5cf6",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/8f7c780fc7bc6edd91080c98de4877772cc773b0",
                 "reference": "57c64ce2130b83398fd5a33f4368a718e00a5cf6",
                 "shasum": ""
             },
@@ -3033,7 +3164,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/64cf257edac4c1816c171dd9cbe7db49db40b478",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/f715ed07b1bfb94f74c2c4465b540999aa4fee76",
                 "reference": "64cf257edac4c1816c171dd9cbe7db49db40b478",
                 "shasum": ""
             },

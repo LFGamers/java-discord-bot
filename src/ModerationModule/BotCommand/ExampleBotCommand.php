@@ -89,7 +89,6 @@ EOF
         foreach ($strikes as $strike) {
             $minuteAgo = new \DateTime('1 minute ago');
             if ($strike->getInsertDate() < $minuteAgo) {
-                $this->logger
             }
         }
     }
