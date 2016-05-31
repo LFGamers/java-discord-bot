@@ -83,10 +83,10 @@ EOF
             }
         );
 
-        $this->hears('/<@(\d+)>(?:\s+)?(\+\+|\-\-)/', [$this, 'giveUserKarma']);
+        $this->hears('/<@!?(\d+)>(?:\s+)?(\+\+|\-\-)/', [$this, 'giveUserKarma']);
         $this->responds('/^karma (top|best|bottom|worst)(?:\s+)?(\d+)?$/i', [$this, 'showKarma']);
         $this->responds('/^karma clear$/i', [$this, 'clearKarma']);
-        $this->responds('/^karma <@(\d+)>$/i', [$this, 'getKarma']);
+        $this->responds('/^karma <@!?(\d+)>$/i', [$this, 'getKarma']);
     }
 
     public function giveUserKarma(Request $request, array $matches)
