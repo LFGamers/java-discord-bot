@@ -13,7 +13,7 @@ namespace LFGamers\Discord\Helper;
 
 use Discord\Parts\Guild\Guild;
 use Discord\Parts\Guild\Role;
-use Discord\Parts\Permissions\Permission;
+use Discord\Parts\Permissions\RolePermission;
 use Discord\Parts\User\Member;
 use Discord\Parts\User\User;
 use DusanKasan\Knapsack\Collection;
@@ -54,13 +54,13 @@ abstract class RoleHelper
         $resolver = new OptionsResolver();
         $resolver->setDefined(['name', 'hoist', 'mentionable', 'color', 'permissions', 'position']);
 
-        $resolver->setAllowedTypes('permissions', Permission::class);
+        $resolver->setAllowedTypes('permissions', RolePermission::class);
         $resolver->setAllowedTypes('hoist', 'bool');
         $resolver->setAllowedTypes('mentionable', 'bool');
         $resolver->setAllowedTypes('color', 'int');
         $resolver->setAllowedTypes('position', 'int');
 
-        $resolver->setDefault('permissions', 0);
+        $resolver->setDefault('permissions', new RolePermission());
         $resolver->setDefault('position', 0);
 
         $options = $resolver->resolve($options);
@@ -128,7 +128,7 @@ abstract class RoleHelper
         $resolver = new OptionsResolver();
         $resolver->setDefined(['name', 'hoist', 'mentionable', 'color', 'permissions', 'position']);
 
-        $resolver->setAllowedTypes('permissions', Permission::class);
+        $resolver->setAllowedTypes('permissions', RolePermission::class);
         $resolver->setAllowedTypes('hoist', 'bool');
         $resolver->setAllowedTypes('mentionable', 'bool');
         $resolver->setAllowedTypes('color', 'int');
