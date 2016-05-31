@@ -1,0 +1,7 @@
+Showing the {{ type }} {{ count }} users:
+
+{% for index, user in users if user.karma > 0 %}
+{{ index + 1 }}) <@{{ user.identifier }}> - {{ user.karma }}
+{% else %}
+There are no users with karma right now.
+{% endfor %}

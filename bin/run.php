@@ -13,6 +13,7 @@ use Discord\Base\Bot;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\ModerationModule\ModerationModule;
+use LFGamers\Discord\FunModule\FunModule;
 use LFGamers\Discord\ServerManager;
 
 $loader = require __DIR__.'/../vendor/autoload.php';
@@ -20,7 +21,10 @@ AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $bot = Bot::create(
     [
-        'modules'    => [ModerationModule::class],
+        'modules'    => [
+            ModerationModule::class,
+            FunModule::class
+        ],
         'parameters' => [
             'name'                 => 'LFG Bot',
             'version'              => '0.0.1',
@@ -60,7 +64,7 @@ $bot = Bot::create(
                 'dsn'     => getenv('MYSQL_DSN'),
             ],
             'mappings' => [
-                'ModerationModule' => [
+                'LFG' => [
                     'type'   => 'annotation',
                     'dir'    => realpath(__DIR__.'/../src/Model'),
                     'prefix' => 'LFGamers\Discord\Model',

@@ -4,5 +4,6 @@ rm -r var/cache/*
 
 REDIS_DSN="redis://127.0.0.1/" \
 MYSQL_DSN="mysql://root:root@127.0.0.1/test" \
+ADMIN_ID="" \
 TOKEN="" \
 php bin/run.php $@

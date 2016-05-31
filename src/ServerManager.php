@@ -12,7 +12,9 @@
 namespace LFGamers\Discord;
 
 use Discord\Base\AppBundle\Manager\ServerManager as BaseServerManager;
+use Discord\Parts\User\Member;
 use LFGamers\Discord\Model\Server;
+use LFGamers\Discord\Model\User;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -21,22 +23,42 @@ use LFGamers\Discord\Model\Server;
  */
 class ServerManager extends BaseServerManager
 {
-    protected function fetchDatabaseServer()
+    /**
+     * {@inheritdoc}
+     */
+    protected function initialize()
     {
-        $baseServer = parent::fetchDatabaseServer();
+        $repo = $this->getRepository(User::class);
 
-        $server = $this->getRepository('LFG:Server')
-            ->findOneBy(['server' => $baseServer]);
+        foreach ($this->clientServer->members as $member) {
+            $user = $repo->findOneByIdentifier($member->id);
+            if (!empty($user)) {
+                continue;
+            }
 
-        if (empty($server)) {
-            $server = new Server();
-            $server->setServer($baseServer);
-
-            $this->getManager()->persist($server);
-            $this->getManager()->flush($server);
+            $user = new User();
+            $user->setIdentifier($member->id);
+            $user->setServer($this->databaseServer);
+            $this->getManager()->persist($user);
         }
 
-        return $baseServer;
+        $this->getManager()->flush();
     }
 
+    /**
+     * @param Member $member
+     */
+    public function onMemberCreate(Member $member)
+    {
+        $user = $this->getRepository(User::class)->findOneByIdentifier($member->id);
+        if (!empty($user)) {
+            return;
+        }
+
+        $user = new User();
+        $user->setIdentifier($member->id);
+        $user->setServer($this->databaseServer);
+        $this->getManager()->persist($user);
+        $this->getManager()->flush();
+    }
 }
