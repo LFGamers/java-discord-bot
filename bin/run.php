@@ -11,6 +11,7 @@
 
 use Discord\Base\Bot;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use LFGamers\Discord\BaseModule\BaseModule;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\ModerationModule\ModerationModule;
 use LFGamers\Discord\FunModule\FunModule;
@@ -22,6 +23,7 @@ AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 $bot = Bot::create(
     [
         'modules'    => [
+            BaseModule::class,
             ModerationModule::class,
             FunModule::class
         ],

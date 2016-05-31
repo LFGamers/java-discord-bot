@@ -11,8 +11,8 @@
 
 namespace LFGamers\Discord\FunModule\BotCommand;
 
-use Discord\Base\AbstractBotCommand;
 use Discord\Base\Request;
+use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\Model\User;
 
