@@ -7,7 +7,8 @@
         "doctrine/orm": "^2.5",
         "cache/chain-adapter": "^0.3.0",
         "cache/redis-adapter": "^0.4.1",
-        "cache/array-adapter": "^0.4.0"
+        "cache/array-adapter": "^0.4.0",
+        "dusank/knapsack": "^6.2"
     },
     "autoload": {
         "psr-4": {
