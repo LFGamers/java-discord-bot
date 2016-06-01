@@ -111,12 +111,38 @@ class AclHelper
         }
 
         foreach ($dbRole->getPermissions() as $perm) {
-            if ($perm->getName() === $permission || $perm->getName() === '*') {
+            $isWildcard = strpos($perm->getName(), '*') !== false && $this->isWildcardMatch($perm, $permission);
+            if ($isWildcard || $perm->getName() === $permission) {
                 return $perm->isAllowed() ? 1 : -1;
             }
         }
 
         return 0;
+    }
+
+    /**
+     * @param Permission $perm
+     * @param string     $permission
+     *
+     * @return bool
+     */
+    private function isWildcardMatch(Permission $perm, string $permission) : bool
+    {
+        $nameArray       = explode('.', $perm->getName());
+        $permissionArray = explode('.', $permission);
+        foreach ($nameArray as $x) {
+            foreach ($permissionArray as $y) {
+                if ($x === '*') {
+                    return true;
+                }
+
+                if ($x !== $y) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -154,5 +180,26 @@ class AclHelper
 
         $this->entityManager->flush($dbRole);
         $this->cache = [];
+    }
+
+    /**
+     * @param Guild $server
+     */
+    public function wipeServerPermissions(Guild $server)
+    {
+        foreach ($server->roles->all() as $role) {
+            /** @var \LFGamers\Discord\Model\Role $dbRole */
+            $dbRole = $this->entityManager->getRepository(DbRole::class)->findOneByIdentifier($role->id);
+            if (empty($dbRole)) {
+                continue;
+            }
+
+            foreach ($dbRole->getPermissions() as $permission) {
+                $this->entityManager->remove($permission);
+            }
+            $this->entityManager->remove($dbRole);
+        }
+
+        $this->entityManager->flush();
     }
 }

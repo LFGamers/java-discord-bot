@@ -32,13 +32,13 @@ class Config
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, name="config_key")
      */
     protected $key;
 
     /**
      * @var string
-     * @ORM\Column(type="blob")
+     * @ORM\Column(type="blob", name="config_value")
      */
     protected $value;
 

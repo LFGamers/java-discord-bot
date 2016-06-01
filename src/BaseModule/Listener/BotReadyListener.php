@@ -52,43 +52,28 @@ class BotReadyListener
      */
     public function onBotReady(BotEvent $event)
     {
+        $this->wipePermissions();
+        
         // Global Perms
         $this->grantPermission('Owners', '*');
         $this->grantPermission('Community Adviser', '*');
 
-        // Moderator Perms
+        /*
+         * Moderator Perms
+         *
+         * Perma Ban: moderation.ban.permanent
+         * Temp Ban:  moderation.ban.temporary
+         * Soft Ban:  moderation.ban.soft
+         * Kick:      moderation.kick
+         * Mute:      moderation.mute
+         * Purge:     moderation.purge
+         */
 
-        // Ban
-        $this->grantPermission('Community Moderator', 'moderation.ban.permanent');
-        $this->grantPermission('Chief', 'moderation.ban.permanent');
-        $this->grantPermission('Senior', 'moderation.ban.permanent');
-
-        // Temp Ban
-        $this->grantPermission('Community Moderator', 'moderation.ban.temporary');
-        $this->grantPermission('Chief', 'moderation.ban.temporary');
-        $this->grantPermission('Senior', 'moderation.ban.temporary');
-
-        // Soft Ban
-        $this->grantPermission('Community Moderator', 'moderation.ban.soft');
-        $this->grantPermission('Chief', 'moderation.ban.soft');
-        $this->grantPermission('Senior', 'moderation.ban.soft');
-
-        // Kick
-        $this->grantPermission('Community Moderator', 'moderation.kick');
-        $this->grantPermission('Chief', 'moderation.kick');
-        $this->grantPermission('Senior', 'moderation.kick');
+        $this->grantPermission('Community Moderator', 'moderation.*');
+        $this->grantPermission('Chief', 'moderation.*');
+        $this->grantPermission('Senior', 'moderation.*');
         $this->grantPermission('Junior', 'moderation.kick');
-
-        // Mute
-        $this->grantPermission('Community Moderator', 'moderation.mute');
-        $this->grantPermission('Chief', 'moderation.mute');
-        $this->grantPermission('Senior', 'moderation.mute');
         $this->grantPermission('Junior', 'moderation.mute');
-
-        // Purge
-        $this->grantPermission('Community Moderator', 'moderation.purge');
-        $this->grantPermission('Chief', 'moderation.purge');
-        $this->grantPermission('Senior', 'moderation.purge');
     }
 
     /**
@@ -110,5 +95,10 @@ class BotReadyListener
     protected function getRole(string $name)
     {
         return RoleHelper::getRoleByName($name, $this->server);
+    }
+
+    private function wipePermissions()
+    {
+        $this->acl->wipeServerPermissions($this->server);
     }
 }
