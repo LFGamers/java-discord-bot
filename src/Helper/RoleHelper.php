@@ -86,11 +86,11 @@ abstract class RoleHelper
      */
     public static function deleteRoleFromServer($role, Guild $server = null) : bool
     {
-        if ($role instanceof Role) {
-            return $role->delete();
+        if (!($role instanceof Role)) {
+            $role = static::getRoleByName($role, $server);
         }
 
-        return static::deleteRoleFromServer(static::getRoleByName($role, $server));
+        return $role->delete();
     }
 
     /**
@@ -104,7 +104,7 @@ abstract class RoleHelper
     {
         $role = $server->roles->get('name', $name);
         if (empty($role)) {
-            throw new \Exception("Role not found");
+            throw new \Exception("Role not found: " . $name);
         }
 
         return $role;
@@ -122,7 +122,7 @@ abstract class RoleHelper
     public static function editRole($role, array $options, Guild $server = null) : Role
     {
         if (!($role instanceof Role)) {
-            return static::editRole(static::getRoleByName($role, $server), $options, $server);
+            $role = static::getRoleByName($role, $server);
         }
 
         $resolver = new OptionsResolver();
@@ -135,7 +135,6 @@ abstract class RoleHelper
         $resolver->setAllowedTypes('position', 'int');
         $options = $resolver->resolve($options);
 
-        $role = new Role();
         foreach ($options as $key => $value) {
             $role->{$key} = $value;
         }
@@ -206,5 +205,26 @@ abstract class RoleHelper
         }
 
         return new Collection($user->roles->all());
+    }
+
+    /**
+     * @param User|Member $user
+     * @param Role|string $role
+     * @param Guild|null  $server
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public static function userHasRole($user, $role, Guild $server = null) : bool
+    {
+        if (!($user instanceof Member)) {
+            $user = UserHelper::getMember($user, $server);
+        }
+
+        if (!($role instanceof Role)) {
+            $role = static::getRoleByName($role, $server);
+        }
+
+        return !empty($user->roles->get('id', $role->id));
     }
 }

@@ -40,15 +40,13 @@ class Role
     /**
      * @var ArrayCollection|Permission[]
      *
-     * @ORM\ManyToMany(targetEntity="Permission")
-     * @ORM\JoinTable(
-     *      name="role_permissions",
-     *      joinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="permission_id", referencedColumnName="id", unique=true)}
-     *  )
+     * @ORM\OneToMany(targetEntity="Permission", mappedBy="role")
      */
     protected $permissions;
 
+    /**
+     * Role constructor.
+     */
     public function __construct()
     {
         $this->permissions = new ArrayCollection();
@@ -95,7 +93,7 @@ class Role
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|Permission[]
      */
     public function getPermissions()
     {
@@ -110,6 +108,20 @@ class Role
     public function setPermissions(array $permissions) : Role
     {
         $this->permissions = new ArrayCollection($permissions);
+
+        return $this;
+    }
+
+    /**
+     * @param Permission $permission
+     *
+     * @return Role
+     */
+    public function addPermission(Permission $permission) : Role
+    {
+        if (!$this->permissions->contains($permission)) {
+            $this->permissions->add($permission);
+        }
 
         return $this;
     }

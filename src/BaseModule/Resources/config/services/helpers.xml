@@ -3,7 +3,11 @@
 
     <services>
         <service id="helper.config" class="LFGamers\Discord\Helper\ConfigHelper">
-            <argument type="service" id="default_manager" />
+            <argument type="service" id="default_manager"/>
+        </service>
+        <service id="helper.acl" class="LFGamers\Discord\Helper\AclHelper">
+            <argument type="service" id="default_manager"/>
+            <argument type="service" id="monolog.logger.bot"/>
         </service>
     </services>
 </container>

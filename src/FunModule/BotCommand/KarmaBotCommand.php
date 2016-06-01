@@ -13,6 +13,7 @@ namespace LFGamers\Discord\FunModule\BotCommand;
 
 use Discord\Base\Request;
 use LFGamers\Discord\AbstractBotCommand;
+use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\Model\User;
 
@@ -89,7 +90,7 @@ EOF
         $this->responds('/^karma <@!?(\d+)>$/i', [$this, 'getKarma']);
     }
 
-    public function giveUserKarma(Request $request, array $matches)
+    protected function giveUserKarma(Request $request, array $matches)
     {
         if ($request->isPrivateMessage()) {
             return $request->reply("This must be ran in a server.");
@@ -128,7 +129,7 @@ EOF
         );
     }
 
-    public function showKarma(Request $request, array $matches)
+    protected function showKarma(Request $request, array $matches)
     {
         $sort = $matches[1] === 'top' || $matches[1] === 'best' ? 'desc' : 'asc';
         $limit = !empty($matches[2]) ? (int) $matches[2] : 5;
@@ -147,7 +148,7 @@ EOF
         );
     }
 
-    public function getKarma(Request $request, array $matches)
+    protected function getKarma(Request $request, array $matches)
     {
         if ($request->isPrivateMessage()) {
             return $request->reply("This must be ran in a server.");
@@ -165,13 +166,12 @@ EOF
         $request->reply("<@{$clientUser->id}> currently has {$user->getKarma()} karma.");
     }
 
-    public function clearKarma(Request $request)
+    protected function clearKarma(Request $request)
     {
-        if (!$request->isAdmin()) {
-            $request->getMessage()->delete();
+        if (!$this->isAllowed(UserHelper::getMember($request->getAuthor(), $request->getServer()), 'karma.clear')) {
             return;
         }
-        
+
         /** @var Server $dbServer */
         $dbServer = $request->getDatabaseServer();
         foreach ($dbServer->getUsers() as $user) {

@@ -28,6 +28,11 @@ class ConfigHelper
     private $entityManager;
 
     /**
+     * @var array
+     */
+    private $cache = [];
+
+    /**
      * ConfigHelper constructor.
      *
      * @param EntityManager $entityManager
@@ -47,12 +52,17 @@ class ConfigHelper
 
     /**
      * @param string $key
+     * @param bool   $fresh Should we skip cache?
      *
      * @return mixed
      */
-    public function get($key)
+    public function get($key, $fresh = false)
     {
-        return $this->getRepository()->findOneByKey($key);
+        if (isset($this->cache[$key]) && !$fresh) {
+            return $this->cache[$key];
+        }
+
+        return $this->cache[$key] = $this->getRepository()->findOneByKey($key);
     }
 
     /**
@@ -72,6 +82,7 @@ class ConfigHelper
         $item->setValue($value);
 
         $this->entityManager->flush($item);
+        unset($this->cache[$key]);
 
         return $this;
     }

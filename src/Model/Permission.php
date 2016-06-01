@@ -37,6 +37,20 @@ class Permission
     protected $name;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    protected $allowed;
+
+    /**
+     * @var Role
+     *
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="permissions")
+     * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
+     */
+    protected $role;
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -72,6 +86,46 @@ class Permission
     public function setName(string $name) : Permission
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAllowed() : bool
+    {
+        return $this->allowed;
+    }
+
+    /**
+     * @param boolean $allowed
+     *
+     * @return Permission
+     */
+    public function setAllowed(bool $allowed) : Permission
+    {
+        $this->allowed = $allowed;
+
+        return $this;
+    }
+
+    /**
+     * @return Role
+     */
+    public function getRole() : Role
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param Role $role
+     *
+     * @return Permission
+     */
+    public function setRole(Role $role) : Permission
+    {
+        $this->role = $role;
 
         return $this;
     }

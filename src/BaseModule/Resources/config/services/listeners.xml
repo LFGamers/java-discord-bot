@@ -1,0 +1,12 @@
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="listener.ready" class="LFGamers\Discord\BaseModule\Listener\BotReadyListener">
+            <argument type="service" id="helper.acl" />
+            <argument type="service" id="discord" />
+
+            <tag name="kernel.event_listener" event="ready_finish" method="onBotReady"/>
+        </service>
+    </services>
+</container>
