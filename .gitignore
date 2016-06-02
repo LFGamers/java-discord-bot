@@ -5,6 +5,8 @@ bin/*.sh
 vendor/
 puphpet/files/dot/ssh/*rsa*
 
+config/config.json
+
 node_modules
 
 .idea/
