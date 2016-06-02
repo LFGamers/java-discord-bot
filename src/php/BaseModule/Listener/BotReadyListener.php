@@ -74,6 +74,9 @@ class BotReadyListener
         $this->grantPermission('Senior', 'moderation.*');
         $this->grantPermission('Junior', 'moderation.kick');
         $this->grantPermission('Junior', 'moderation.mute');
+
+        // Mod Log Perms
+        $this->grantPermission('Community Moderator', 'modlog.*');
     }
 
     /**

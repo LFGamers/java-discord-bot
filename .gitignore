@@ -3,8 +3,12 @@ var/logs/*
 var/cache/*
 bin/*.sh
 vendor/
-
 puphpet/files/dot/ssh/*rsa*
-node_modules
 
 config/config.json
+
+node_modules
+
+.idea/
+.vagrant/
+
