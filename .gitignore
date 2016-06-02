@@ -9,4 +9,3 @@ puphpet/files/dot/ssh/*rsa*
 .vagrant/
 
 node_modules
-src/js/dashboard/node_modules
