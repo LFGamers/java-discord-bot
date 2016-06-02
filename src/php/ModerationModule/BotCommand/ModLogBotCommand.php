@@ -83,7 +83,7 @@ EOF
         foreach ($logs as $log) {
             $output .= sprintf(
                 "\n[%s] [**%s**] from <@!%d> \n\n```\n%s\n```---\n",
-                $log->getDatetime()->format('Y-m-d H:i:s e'),
+                $log->getDatetime()->format('Y-m-d h:i:sa T'),
                 ucfirst($log->getCategory()),
                 $log->getAuthor()->getIdentifier(),
                 $log->getMessage() ?: 'No message'
