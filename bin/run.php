@@ -16,11 +16,15 @@ use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\ModerationModule\ModerationModule;
 use LFGamers\Discord\FunModule\FunModule;
 use LFGamers\Discord\ServerManager;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 $loader = require __DIR__.'/../vendor/autoload.php';
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
-$bot = Bot::create(
+$resolver = new OptionsResolver();
+$resolver->setRequired(['admin_id', 'token', 'redis_dsn', 'mysql_dsn']);
+$config = $resolver->resolve(json_decode(file_get_contents(__DIR__.'/../config/config.json'), true));
+$bot    = Bot::create(
     [
         'modules'    => [
             BaseModule::class,
@@ -33,8 +37,8 @@ $bot = Bot::create(
             'author'               => 'Looking FOr Gamers',
             'log_dir'              => __DIR__.'/../var/logs/',
             'cache_dir'            => __DIR__.'/../var/cache/',
-            'admin_id'             => getenv('ADMIN_ID'),
-            'token'                => getenv('TOKEN'),
+            'admin_id'             => $config['admin_id'],
+            'token'                => $config['token'],
             'prefix'               => '%',
             'status'               => 'https://lfgame.rs',
             'server_class'         => Server::class,
@@ -56,19 +60,19 @@ $bot = Bot::create(
                 ],
                 'redis' => [
                     'factory' => 'cache.factory.redis',
-                    'options' => ['dsn' => getenv('REDIS_DSN')],
+                    'options' => ['dsn' => $config['redis_dsn']],
                 ],
             ],
         ],
         'databases'  => [
             'mysql'    => [
                 'enabled' => true,
-                'dsn'     => getenv('MYSQL_DSN'),
+                'dsn'     => $config['mysql_dsn'],
             ],
             'mappings' => [
                 'LFG' => [
                     'type'   => 'annotation',
-                    'dir'    => realpath(__DIR__.'/../src/Model'),
+                    'dir'    => realpath(__DIR__.'/../src/php/Model'),
                     'prefix' => 'LFGamers\Discord\Model',
                     'alias'  => 'LFG',
                 ],

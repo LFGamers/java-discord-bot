@@ -5,3 +5,5 @@ bin/*.sh
 vendor/
 
 puphpet/files/dot/ssh/*rsa*
+node_modules
+src/js/dashboard/node_modules
