@@ -6,3 +6,5 @@ vendor/
 
 puphpet/files/dot/ssh/*rsa*
 node_modules
+
+config/config.json
