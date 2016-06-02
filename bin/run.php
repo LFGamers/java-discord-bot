@@ -23,6 +23,7 @@ AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $resolver = new OptionsResolver();
 $resolver->setRequired(['admin_id', 'token', 'redis_dsn', 'mysql_dsn']);
+$resolver->setDefined('log_js_events', 'logged_servers', 'mongo_dsn');
 $config = $resolver->resolve(json_decode(file_get_contents(__DIR__.'/../config/config.json'), true));
 $bot    = Bot::create(
     [
