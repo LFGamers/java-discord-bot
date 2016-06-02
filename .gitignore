@@ -5,7 +5,7 @@ bin/*.sh
 vendor/
 puphpet/files/dot/ssh/*rsa*
 
+node_modules
+
 .idea/
 .vagrant/
-
-node_modules
