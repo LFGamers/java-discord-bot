@@ -5,3 +5,5 @@ bin/*.sh
 vendor/
 
 puphpet/files/dot/ssh/*rsa*
+
+.idea/
