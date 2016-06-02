@@ -1,0 +1,27 @@
+{
+  "name": "lfgamers-js-bot",
+  "version": "1.0.0",
+  "description": "Clone, run vagrant up, vagrant ssh.",
+  "main": "bin/run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LFGamers/php-discord-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LFGamers/php-discord-bot/issues"
+  },
+  "homepage": "https://github.com/LFGamers/php-discord-bot#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "colors": "^1.1.2",
+    "eris": "github:abalabahaha/Eris",
+    "express": "^4.13.4",
+    "moment": "^2.13.0",
+    "pipend-spy": "^0.1.0"
+  }
+}

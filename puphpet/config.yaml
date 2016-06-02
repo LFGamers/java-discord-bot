@@ -305,9 +305,9 @@ python:
     packages: {  }
     versions: {  }
 nodejs:
-    install: '0'
+    install: '1'
     settings:
-        version: '5'
+        version: '6'
     npm_packages: {  }
 hhvm:
     install: '0'
@@ -379,7 +379,7 @@ postgresql:
     grants: {  }
     adminer: 0
 mongodb:
-    install: '0'
+    install: '1'
     settings:
         bind_ip: 127.0.0.1
         port: '27017'

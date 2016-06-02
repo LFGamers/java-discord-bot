@@ -12,7 +12,7 @@
     },
     "autoload": {
         "psr-4": {
-            "LFGamers\\Discord\\": "src/"
+            "LFGamers\\Discord\\": "src/php/"
         }
     },
     "license": "MIT",
