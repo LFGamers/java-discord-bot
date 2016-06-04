@@ -12,6 +12,8 @@
 namespace LFGamers\Discord\BaseModule;
 
 use Discord\Base\AbstractModule;
+use LFGamers\Discord\BaseModule\DependencyInjection\Compiler\RequestFactoryCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -28,8 +30,21 @@ class BaseModule extends AbstractModule
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public static function isDisableable()
     {
         return false;
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new RequestFactoryCompilerPass());
     }
 }

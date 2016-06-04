@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4b2e89804adf85a52b9e700c3124db23",
+    "hash": "f1a629cff24a25d6776c27b887ea0a9f",
     "content-hash": "17ff9d1d9bfd46829cfb935af0d99f15",
     "packages": [
         {
@@ -908,16 +908,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.2",
+            "version": "1.6.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "e9c2ccf573b59b7cea566390f34254fed3c20ed9"
+                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/e9c2ccf573b59b7cea566390f34254fed3c20ed9",
-                "reference": "e9c2ccf573b59b7cea566390f34254fed3c20ed9",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/fd51907c6c76acaa8a5234822a4f901c1500afc1",
+                "reference": "fd51907c6c76acaa8a5234822a4f901c1500afc1",
                 "shasum": ""
             },
             "require": {
@@ -934,13 +934,14 @@
                 "phpunit/phpunit": "~4",
                 "satooshi/php-coveralls": "~0.6.1",
                 "symfony/phpunit-bridge": "~2.7|~3.0",
+                "symfony/property-info": "~2.8|~3.0",
                 "symfony/validator": "~2.2|~3.0",
                 "symfony/yaml": "~2.2|~3.0",
                 "twig/twig": "~1.10"
             },
             "suggest": {
                 "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
-                "symfony/web-profiler-bundle": "to use the data collector"
+                "symfony/web-profiler-bundle": "To use the data collector."
             },
             "type": "symfony-bundle",
             "extra": {
@@ -983,7 +984,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2016-01-10 17:21:44"
+            "time": "2016-04-21 19:55:56"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -1805,26 +1806,26 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "a0ac5cf1bcd625c677c237c77834f13b7078bda5"
+                "reference": "179b3d477f948e1c7cb796832d3e11d154d0d659"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/a0ac5cf1bcd625c677c237c77834f13b7078bda5",
-                "reference": "a0ac5cf1bcd625c677c237c77834f13b7078bda5",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/179b3d477f948e1c7cb796832d3e11d154d0d659",
+                "reference": "179b3d477f948e1c7cb796832d3e11d154d0d659",
                 "shasum": ""
             },
             "require": {
-                "ad7six/dsn": "^0.4.0",
+                "ad7six/dsn": "^0.4",
                 "aequasi/environment": "^2.0",
-                "cache/adapter-bundle": "^0.3.3",
+                "cache/adapter-bundle": "^0.3",
                 "doctrine/doctrine-bundle": "^1.4",
                 "incenteev/composer-parameter-handler": "^2.0",
-                "php": "^5.6|^7.0",
+                "php": "^7.0",
                 "regex-guard/regex-guard": "^1.1",
                 "sensio/distribution-bundle": "^5.0",
                 "symfony/monolog-bundle": "^2.4|^3.0",
                 "symfony/symfony": "^2.8|^3.0",
-                "team-reflex/discord-php": "dev-develop@dev"
+                "team-reflex/discord-php": "dev-master@dev"
             },
             "require-dev": {
                 "doctrine/mongodb-odm": "^1.0",
@@ -1848,7 +1849,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-05-31 23:55:46"
+            "time": "2016-06-02 22:45:29"
         },
         {
             "name": "monolog/monolog",
@@ -3220,16 +3221,16 @@
         },
         {
             "name": "team-reflex/discord-php",
-            "version": "dev-develop",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "40cd9e730d64bb168123cfc973ac942c4587ace5"
+                "reference": "a32d45fd22d855a35d0527d865a196d8b4fc796c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/40cd9e730d64bb168123cfc973ac942c4587ace5",
-                "reference": "40cd9e730d64bb168123cfc973ac942c4587ace5",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/a32d45fd22d855a35d0527d865a196d8b4fc796c",
+                "reference": "a32d45fd22d855a35d0527d865a196d8b4fc796c",
                 "shasum": ""
             },
             "require": {
@@ -3274,7 +3275,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-05-31 19:42:12"
+            "time": "2016-06-03 23:11:48"
         },
         {
             "name": "twig/twig",

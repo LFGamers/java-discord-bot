@@ -155,12 +155,12 @@ abstract class RoleHelper
      */
     public static function addUserToRole($user, $role, Guild $server = null) : bool
     {
-        if (!($role instanceof Role)) {
-            $role = static::getRoleByName($role, $server);
-        }
-
         if (!($user instanceof Member)) {
             $user = UserHelper::getMember($user, $server);
+        }
+
+        if (!($role instanceof Role)) {
+            $role = static::getRoleByName($role, $server === null ? $user->getGuildAttribute() : $server);
         }
 
         $user->addRole($role);
@@ -179,12 +179,12 @@ abstract class RoleHelper
      */
     public static function removeUserFromRole($user, $role, Guild $server = null) : bool
     {
-        if (!($role instanceof Role)) {
-            $role = static::getRoleByName($role, $server);
-        }
-
         if (!($user instanceof Member)) {
             $user = UserHelper::getMember($user, $server);
+        }
+
+        if (!($role instanceof Role)) {
+            $role = static::getRoleByName($role, $server === null ? $user->getGuildAttribute() : $server);
         }
 
         $user->removeRole($role);
@@ -222,7 +222,7 @@ abstract class RoleHelper
         }
 
         if (!($role instanceof Role)) {
-            $role = static::getRoleByName($role, $server);
+            $role = static::getRoleByName($role, $server === null ? $user->getGuildAttribute() : $server);
         }
 
         return !empty($user->roles->get('id', $role->id));

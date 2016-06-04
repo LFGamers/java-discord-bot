@@ -14,6 +14,8 @@ namespace LFGamers\Discord\FunModule\BotCommand;
 use Discord\Base\Request;
 use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Helper\UserHelper;
+use LFGamers\Discord\Model\Karma;
+use LFGamers\Discord\Model\KarmaLog;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\Model\User;
 
@@ -63,11 +65,12 @@ class KarmaBotCommand extends AbstractBotCommand
                 <<<EOF
 Use the following to manage karma:
 
-`@user++` or `@user ++` to give user karma
-`@user--` or `@user --` to remove user karma
+`@user++` or `@user ++` to give user some of your karma
 `karma top` to list the top karma
 `karma bottom` to list the worst karma
 `karma clear` to clear the karma (must be admin)
+`karma give @user` to feed the pool with some admin karma
+`karma remove @user` to starve the pool of some admin karma
 EOF
             );
     }
@@ -84,10 +87,61 @@ EOF
             }
         );
 
-        $this->hears('/<@!?(\d+)>(?:\s+)?(\+\+|\-\-)/', [$this, 'giveUserKarma']);
+        $this->hears('/<@!?(\d+)>(?:\s+)?\+\+/', [$this, 'giveUserKarma']);
         $this->responds('/^karma (top|best|bottom|worst)(?:\s+)?(\d+)?$/i', [$this, 'showKarma']);
+        $this->responds('/^karma givers(?:\s+)?(\d+)?$/i', [$this, 'showKarmaGivers']);
         $this->responds('/^karma clear$/i', [$this, 'clearKarma']);
         $this->responds('/^karma <@!?(\d+)>$/i', [$this, 'getKarma']);
+        $this->responds('/^karma (give|remove) <@!?(\d+)>$/i', [$this, 'staffKarma']);
+    }
+
+    /**
+     * @param Request $request
+     * @param array   $matches
+     *
+     * @return \Discord\Parts\Channel\Message|void|null
+     * @throws \Exception
+     */
+    protected function staffKarma(Request $request, array $matches)
+    {
+        if ($request->isPrivateMessage()) {
+            return $request->reply("This must be ran in a server.");
+        }
+
+        if (!$this->isAllowed(UserHelper::getMember($request->getAuthor(), $request->getServer()), 'karma.staff')) {
+            return;
+        }
+
+        /** @var \Discord\Parts\User\User $clientUser */
+        $clientUser = $this->discord->client->users->get('id', $matches[2]);
+        $user       = $this->getManager()->getRepository(User::class)->findOneByIdentifier($clientUser->id);
+        if (empty($user)) {
+            $user = new User();
+            $user->setIdentifier($clientUser->id);
+            $this->getManager()->persist($user);
+        }
+
+        if ($request->getAuthor()->id === $clientUser->id) {
+            return $request->reply("... Nice try.");
+        }
+
+        $phrase = $matches[1] === 'give'
+            ? self::POSITIVE_MESSAGES[array_rand(self::POSITIVE_MESSAGES)]
+            : self::NEGATIVE_MESSAGES[array_rand(self::NEGATIVE_MESSAGES)];
+
+        $karma = $matches[1] === 'give' ? 1 : -1;
+        $user->setKarma($user->getKarma() + $karma);
+        $this->getManager()->flush($user);
+
+        $request->reply(
+            $request->renderTemplate(
+                '@Fun/Karma/give.md.twig',
+                [
+                    'phrase' => $phrase,
+                    'user'   => $user,
+                ]
+            )
+        );
     }
 
     protected function giveUserKarma(Request $request, array $matches)
@@ -105,18 +159,26 @@ EOF
             $this->getManager()->persist($user);
         }
 
-        if ($request->getAuthor()->id === $clientUser->id && $matches[2] === '++') {
-            $request->reply("... Nice try.");
-            $matches[2] = '--';
+        if ($request->getAuthor()->id === $clientUser->id) {
+            return $request->reply("... Nice try.");
+        }
+        
+        /** @var User $author */
+        $author = $this->getManager()->getRepository(User::class)->findOneByIdentifier($request->getAuthor()->id);
+        if ($author->getKarma() < 1) {
+            return $request->reply("You don't have any karma to give!");
         }
 
-        $phrase = $matches[2] === '++'
-            ? self::POSITIVE_MESSAGES[array_rand(self::POSITIVE_MESSAGES)]
-            : self::NEGATIVE_MESSAGES[array_rand(self::NEGATIVE_MESSAGES)];
+        $phrase = self::POSITIVE_MESSAGES[array_rand(self::POSITIVE_MESSAGES)];
 
-        $karma = $matches[2] === '++' ? 1 : -1;
-        $user->setKarma($user->getKarma() + $karma);
-        $this->getManager()->flush($user);
+        $author->setKarma($author->getKarma() - 1);
+        $user->setKarma($user->getKarma() + 1);
+        $karmaLog = new KarmaLog();
+        $karmaLog->setRecipient($user);
+        $karmaLog->setSender($author);
+        $karmaLog->setInsertDate(new \DateTime());
+        $this->getManager()->persist($karmaLog);
+        $this->getManager()->flush();
 
         $request->reply(
             $request->renderTemplate(
@@ -131,17 +193,22 @@ EOF
 
     protected function showKarma(Request $request, array $matches)
     {
-        $sort = $matches[1] === 'top' || $matches[1] === 'best' ? 'desc' : 'asc';
+        if ($request->isPrivateMessage()) {
+            return $request->reply("This must be ran in a server.");
+        }
+
+        $sort  = ($matches[1] === 'top' || $matches[1] === 'best') ? 'desc' : 'asc';
         $limit = !empty($matches[2]) ? (int) $matches[2] : 5;
 
         $qb = $this->getManager()->getRepository(User::class)->createQueryBuilder('u');
+        $qb->where('u.karma != 0');
         $qb->orderBy('u.karma', $sort);
         $qb->setMaxResults($limit);
 
         $users = $qb->getQuery()->getResult();
 
         $request->reply(
-                $request->renderTemplate(
+            $request->renderTemplate(
                 '@Fun/Karma/list.md.twig',
                 ['users' => $users, 'type' => $matches[1], 'count' => $limit]
             )
