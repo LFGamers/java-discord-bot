@@ -89,7 +89,6 @@ EOF
 
         $this->hears('/<@!?(\d+)>(?:\s+)?\+\+/', [$this, 'giveUserKarma']);
         $this->responds('/^karma (top|best|bottom|worst)(?:\s+)?(\d+)?$/i', [$this, 'showKarma']);
-        $this->responds('/^karma givers(?:\s+)?(\d+)?$/i', [$this, 'showKarmaGivers']);
         $this->responds('/^karma clear$/i', [$this, 'clearKarma']);
         $this->responds('/^karma <@!?(\d+)>$/i', [$this, 'getKarma']);
         $this->responds('/^karma (give|remove) <@!?(\d+)>$/i', [$this, 'staffKarma']);
