@@ -5,6 +5,14 @@
     "admin_id":       0,
     "token":          "",
     "log_js_events":  true,
+    "features": {
+        "event_log": {
+            "enabled": false
+        },
+        "karma":     {
+            "enabled": false
+        }
+    },
     "logged_servers": [
         {
             "id":       108439985920704512,

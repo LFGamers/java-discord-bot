@@ -22,7 +22,7 @@ $loader = require __DIR__.'/../vendor/autoload.php';
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $resolver = new OptionsResolver();
-$resolver->setRequired(['admin_id', 'token', 'redis_dsn', 'mysql_dsn']);
+$resolver->setRequired(['admin_id', 'token', 'redis_dsn', 'mysql_dsn', 'features']);
 $resolver->setDefined(['log_js_events', 'logged_servers', 'mongo_dsn']);
 $config = $resolver->resolve(json_decode(file_get_contents(__DIR__.'/../config/config.json'), true));
 $bot    = Bot::create(
@@ -43,7 +43,8 @@ $bot    = Bot::create(
             'prefix'               => '%',
             'status'               => 'https://lfgame.rs',
             'server_class'         => Server::class,
-            'server_manager_class' => ServerManager::class
+            'server_manager_class' => ServerManager::class,
+            'features'             => $config['features']
         ],
         'cache'      => [
             'providers' => [

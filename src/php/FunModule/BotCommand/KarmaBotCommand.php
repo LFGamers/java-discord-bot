@@ -145,6 +145,10 @@ EOF
 
     protected function giveUserKarma(Request $request, array $matches)
     {
+        if (!$this->container->getParameter('features')['karma']['enabled']) {
+            return;
+        }
+
         if ($request->isPrivateMessage()) {
             return $request->reply("This must be ran in a server.");
         }
