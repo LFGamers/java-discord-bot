@@ -43,7 +43,7 @@ $bot    = Bot::create(
             'prefix'               => '%',
             'status'               => [
                 'name' => 'https://lfgame.rs',
-                'url' => 'https://lfgame.rs',
+                'url'  => 'https://lfgame.rs',
                 'type' => 1
             ],
             'server_class'         => Server::class,
@@ -77,10 +77,10 @@ $bot    = Bot::create(
             ],
             'mappings' => [
                 'LFG' => [
-                    'type'   => 'annotation',
-                    'dir'    => realpath(__DIR__.'/../src/php/Model'),
-                    'prefix' => 'LFGamers\Discord\Model',
-                    'alias'  => 'LFG',
+                    'type'      => 'annotation',
+                    'dir'       => realpath(__DIR__.'/../src/Model'),
+                    'prefix'    => 'LFGamers\Discord\Model',
+                    'alias'     => 'LFG',
                 ],
             ],
         ],
