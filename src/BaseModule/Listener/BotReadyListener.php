@@ -11,8 +11,8 @@
 
 namespace LFGamers\Discord\BaseModule\Listener;
 
-use Discord\Base\AppBundle\Discord;
 use Discord\Base\AppBundle\Event\BotEvent;
+use Discord\Discord;
 use Discord\Parts\Guild\Guild;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\RoleHelper;
@@ -44,7 +44,7 @@ class BotReadyListener
     {
         $this->acl = $acl;
 
-        $this->server = $discord->client->guilds->get('id', 108439985920704512);
+        $this->server = $discord->guilds->get('id', 108439985920704512);
     }
 
     /**

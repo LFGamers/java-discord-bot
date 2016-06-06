@@ -11,8 +11,8 @@
 
 namespace LFGamers\Discord\BaseModule\Factory;
 
-use Discord\Base\AppBundle\Discord;
 use Discord\Base\AppBundle\Factory\RequestFactory as BaseRequestFactory;
+use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Request;
@@ -59,7 +59,7 @@ class RequestFactory extends BaseRequestFactory
      *
      * @return Request
      */
-    public function create(Message $message)
+    public function create(Message $message) : Request
     {
         $request = new Request(
             $this->discord,

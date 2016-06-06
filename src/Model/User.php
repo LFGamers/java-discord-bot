@@ -45,6 +45,14 @@ class User
     protected $server;
 
     /**
+     * @var PrivateChannel|null
+     *
+     * @ORM\OneToOne(targetEntity="PrivateChannel")
+     * @ORM\JoinColumn(name="private_channel_id", referencedColumnName="id")
+     */
+    protected $privateChannel;
+
+    /**
      * @var int
      * @ORM\Column(type="integer")
      */
@@ -106,6 +114,26 @@ class User
     public function setServer(Server $server) : User
     {
         $this->server = $server;
+
+        return $this;
+    }
+
+    /**
+     * @return PrivateChannel|null
+     */
+    public function getPrivateChannel()
+    {
+        return $this->privateChannel;
+    }
+
+    /**
+     * @param PrivateChannel|null $privateChannel
+     *
+     * @return User
+     */
+    public function setPrivateChannel(PrivateChannel $privateChannel = null) : User
+    {
+        $this->privateChannel = $privateChannel;
 
         return $this;
     }

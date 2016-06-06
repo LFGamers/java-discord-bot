@@ -379,7 +379,7 @@ postgresql:
     grants: {  }
     adminer: 0
 mongodb:
-    install: '1'
+    install: '0'
     settings:
         bind_ip: 127.0.0.1
         port: '27017'

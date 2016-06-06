@@ -12,9 +12,15 @@
     },
     "autoload": {
         "psr-4": {
-            "LFGamers\\Discord\\": "src/php/"
+            "LFGamers\\Discord\\": "src/"
         }
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url":  "git@github.com:uniquoooo/DiscordPHP-Rewrite.git"
+        }
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -23,5 +29,8 @@
         }
     ],
     "minimum-stability": "dev",
-    "prefer-stable":     true
+    "prefer-stable":     true,
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    }
 }

@@ -11,8 +11,8 @@
 
 namespace LFGamers\Discord;
 
-use Discord\Base\AppBundle\Discord;
 use Discord\Base\Request as BaseRequest;
+use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\UserHelper;

@@ -111,8 +111,7 @@ class AclHelper
         }
 
         foreach ($dbRole->getPermissions() as $perm) {
-            $isWildcard = strpos($perm->getName(), '*') !== false && $this->isWildcardMatch($perm, $permission);
-            if ($isWildcard || $perm->getName() === $permission) {
+            if ($this->doesPermissionMatch($perm->getName(), $permission)) {
                 return $perm->isAllowed() ? 1 : -1;
             }
         }
@@ -120,26 +119,30 @@ class AclHelper
         return 0;
     }
 
+    public function doesPermissionMatch(string $allowed, string $required) : bool
+    {
+        $isWildcard = strpos($allowed, '*') !== false && $this->isWildcardMatch($allowed, $required);
+
+        return $isWildcard || $allowed === $required;
+    }
+
     /**
-     * @param Permission $perm
-     * @param string     $permission
+     * @param string $allowed
+     * @param string $permission
      *
      * @return bool
      */
-    private function isWildcardMatch(Permission $perm, string $permission) : bool
+    public function isWildcardMatch(string $allowed, string $permission) : bool
     {
-        $nameArray       = explode('.', $perm->getName());
+        $nameArray       = explode('.', $allowed);
         $permissionArray = explode('.', $permission);
-        foreach ($nameArray as $x) {
-            foreach ($permissionArray as $y) {
-                if ($x === '*') {
-                    return true;
-                }
 
-                if ($x !== $y) {
-                    return false;
-                }
+        foreach ($nameArray as $index => $x) {
+            if ($x === $permissionArray[$index] || $x === '*') {
+                continue;
             }
+
+            return false;
         }
 
         return true;

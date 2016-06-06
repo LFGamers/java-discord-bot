@@ -41,13 +41,20 @@ $bot    = Bot::create(
             'admin_id'             => $config['admin_id'],
             'token'                => $config['token'],
             'prefix'               => '%',
-            'status'               => 'https://lfgame.rs',
+            'status'               => [
+                'name' => 'https://lfgame.rs',
+                'url' => 'https://lfgame.rs',
+                'type' => 1
+            ],
             'server_class'         => Server::class,
             'server_manager_class' => ServerManager::class,
             'features'             => $config['features']
         ],
         'cache'      => [
             'providers' => [
+                'array' => [
+                    'factory' => 'cache.factory.array',
+                ],
                 'chain' => [
                     'factory' => 'cache.factory.chain',
                     'options' => [
@@ -56,9 +63,6 @@ $bot    = Bot::create(
                             '@cache.provider.redis',
                         ],
                     ],
-                ],
-                'array' => [
-                    'factory' => 'cache.factory.array',
                 ],
                 'redis' => [
                     'factory' => 'cache.factory.redis',
