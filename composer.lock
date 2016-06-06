@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4fcbdff566dd84c69cad93313a7292ce",
+    "hash": "01b5f409cc1a7c8a7b46b3bf7c978540",
     "content-hash": "7b5cacaa29187cb87b321638bd3c90b0",
     "packages": [
         {
@@ -1806,12 +1806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "179b3d477f948e1c7cb796832d3e11d154d0d659"
+                "reference": "7099be5a4c40211b1734e46824bc63f0b473a255"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/179b3d477f948e1c7cb796832d3e11d154d0d659",
-                "reference": "179b3d477f948e1c7cb796832d3e11d154d0d659",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/7099be5a4c40211b1734e46824bc63f0b473a255",
+                "reference": "7099be5a4c40211b1734e46824bc63f0b473a255",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1849,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-06-02 22:45:29"
+            "time": "2016-06-06 22:45:47"
         },
         {
             "name": "monolog/monolog",
@@ -3312,7 +3312,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:uniquoooo/DiscordPHP-Rewrite.git",
-                "reference": "0b816b09fe2748c7ae59b630602bec60b5c1f392"
+                "reference": "a7c20b6e7d469c668023edc65fc1cdc1fe2c6611"
             },
             "require": {
                 "cache/adapter-bundle": "^0.3.3",
@@ -3361,7 +3361,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-06-05 00:10:29"
+            "time": "2016-06-06 08:15:15"
         },
         {
             "name": "twig/twig",
