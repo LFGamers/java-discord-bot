@@ -244,6 +244,7 @@ php:
             - mbstring
             - mysql
             - opcache
+            - ev
             - xsl
         pear: {  }
         pecl:
@@ -253,6 +254,8 @@ php:
         display_errors: 'On'
         error_reporting: '-1'
         session.save_path: /var/lib/php/session
+        php.environment: dev
+        extension: ev.so
         date.timezone: UTC
     fpm_ini:
         error_log: /var/log/php-fpm.log

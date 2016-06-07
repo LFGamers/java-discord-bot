@@ -222,7 +222,7 @@ abstract class RoleHelper
         }
 
         if (!($role instanceof Role)) {
-            $role = static::getRoleByName($role, $server === null ? $user->getGuildAttribute() : $server);
+            $role = static::getRoleByName($role, $server === null ? $user->guild : $server);
         }
 
         return !empty($user->roles->get('id', $role->id));

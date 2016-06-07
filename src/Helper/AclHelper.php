@@ -59,12 +59,13 @@ class AclHelper
     /**
      * @param Member      $member
      * @param Role|string $role
+     * @param Guild       $server
      *
      * @return bool
      */
-    public function userHasRole(Member $member, $role) : bool
+    public function userHasRole(Member $member, $role, Guild $server = null) : bool
     {
-        return RoleHelper::userHasRole($member, $role);
+        return RoleHelper::userHasRole($member, $role, $server);
     }
 
     /**

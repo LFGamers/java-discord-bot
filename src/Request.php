@@ -11,12 +11,14 @@
 
 namespace LFGamers\Discord;
 
+use Discord\Base\AbstractBotCommand as BaseBotCommand;
 use Discord\Base\Request as BaseRequest;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\UserHelper;
 use Monolog\Logger;
+use React\EventLoop\LoopInterface;
 use Twig_Environment;
 
 /**
@@ -55,6 +57,17 @@ class Request extends BaseRequest
         $this->acl = $acl;
     }
 
+    public function processCommand(BaseBotCommand $command)
+    {
+        /** @var LoopInterface $loop */
+        $loop = $this->getDiscord()->loop;
+        $loop->nextTick(
+            function () use ($command) {
+                parent::processCommand($command);
+            }
+        );
+    }
+
     /**
      * @return bool
      */
@@ -63,8 +76,7 @@ class Request extends BaseRequest
         $member = UserHelper::getMember($this->getAuthor(), $this->getServer());
 
         return parent::isAdmin()
-        || $this->acl->userHasRole($member, 'Owners')
-        || $this->acl->userHasRole($member, 'Community Adviser');
+        || $this->acl->userHasRole($member, 'Owners', $this->getServer())
+        || $this->acl->userHasRole($member, 'Community Adviser', $this->getServer());
     }
-
 }
