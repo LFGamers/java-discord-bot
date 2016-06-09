@@ -13,6 +13,7 @@ use Discord\Base\Bot;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use LFGamers\Discord\BaseModule\BaseModule;
 use LFGamers\Discord\Model\Server;
+use LFGamers\Discord\LFGModule\LFGModule;
 use LFGamers\Discord\ModerationModule\ModerationModule;
 use LFGamers\Discord\FunModule\FunModule;
 use LFGamers\Discord\ServerManager;
@@ -30,7 +31,8 @@ $bot    = Bot::create(
         'modules'    => [
             BaseModule::class,
             ModerationModule::class,
-            FunModule::class
+            FunModule::class,
+            LFGModule::class
         ],
         'parameters' => [
             'name'                 => 'LFG Bot',

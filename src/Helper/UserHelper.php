@@ -17,6 +17,7 @@ use Discord\Parts\Permissions\Permission;
 use Discord\Parts\User\Member;
 use Discord\Parts\User\User;
 use DusanKasan\Knapsack\Collection;
+use LFGamers\Discord\Exception\MemberNotFoundException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -31,9 +32,15 @@ abstract class UserHelper
      * @param Guild $guild
      *
      * @return Member
+     * @throws MemberNotFoundException
      */
     public static function getMember(User $user, Guild $guild) : Member
     {
-        return $guild->members->get('id', $user->id);
+        $member = $guild->members->get('id', $user->id);
+        if (empty($member)) {
+            throw new MemberNotFoundException($user->id);
+        }
+
+        return $member;
     }
 }

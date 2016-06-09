@@ -15,6 +15,7 @@ use Discord\Base\AbstractBotCommand as BaseBotCommand;
 use Discord\Base\Request as BaseRequest;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
+use LFGamers\Discord\Exception\MemberNotFoundException;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\UserHelper;
 use Monolog\Logger;
@@ -63,7 +64,11 @@ class Request extends BaseRequest
         $loop = $this->getDiscord()->loop;
         $loop->nextTick(
             function () use ($command) {
-                parent::processCommand($command);
+                try {
+                    parent::processCommand($command);
+                } catch (MemberNotFoundException $e) {
+                    $this->getLogger()->error($e->getMessage());
+                }
             }
         );
     }

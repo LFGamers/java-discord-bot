@@ -31,13 +31,33 @@ class Server extends BaseServer
     protected $users;
 
     /**
+     * @var bool
+     * @ORM\Column(type="boolean")
+     */
+    protected $announcementsEnabled = false;
+
+    /**
+     * @var string
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    protected $announcementsChannel;
+
+    /**
+     * @var ArrayCollection|array|Announcement[]
+     * @ORM\OneToMany(targetEntity="Announcement", mappedBy="server")
+     */
+    protected $announcements;
+
+    /**
      * Server constructor.
      */
     public function __construct()
     {
         parent::__construct();
-        
-        $this->users = new ArrayCollection();
+
+        $this->users                = new ArrayCollection();
+        $this->announcements        = new ArrayCollection();
+        $this->announcementsEnabled = false;
     }
 
     /**
@@ -56,6 +76,94 @@ class Server extends BaseServer
     public function setUsers(array $users) : Server
     {
         $this->users = new ArrayCollection($users);
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isAnnouncementsEnabled() : bool
+    {
+        return $this->announcementsEnabled;
+    }
+
+    /**
+     * @param boolean $announcementsEnabled
+     *
+     * @return Server
+     */
+    public function setAnnouncementsEnabled(bool $announcementsEnabled) : Server
+    {
+        $this->announcementsEnabled = $announcementsEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAnnouncementsChannel() : string
+    {
+        return $this->announcementsChannel;
+    }
+
+    /**
+     * @param string $announcementsChannel
+     *
+     * @return Server
+     */
+    public function setAnnouncementsChannel(string $announcementsChannel) : Server
+    {
+        $this->announcementsChannel = $announcementsChannel;
+
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection|array|Announcement[]
+     */
+    public function getAnnouncements()
+    {
+        return $this->announcements;
+    }
+
+    /**
+     * @param array|Announcement[] $announcements
+     *
+     * @return Server
+     */
+    public function setAnnouncements(array $announcements) : Server
+    {
+        $this->announcements = new ArrayCollection($announcements);
+
+        return $this;
+    }
+
+    /**
+     * @param Announcement $announcement
+     *
+     * @return Server
+     */
+    public function addAnnouncement(Announcement $announcement) : Server
+    {
+        if (!$this->announcements->contains($announcement)) {
+            $this->announcements->add($announcement);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Announcement $announcement
+     *
+     * @return Server
+     */
+    public function removeAnnouncement(Announcement $announcement) : Server
+    {
+        if ($this->announcements->contains($announcement)) {
+            $this->announcements->removeElement($announcement);
+        }
 
         return $this;
     }
