@@ -38,7 +38,7 @@ class Config
 
     /**
      * @var string
-     * @ORM\Column(type="blob", name="config_value")
+     * @ORM\Column(type="text", name="config_value")
      */
     protected $value;
 

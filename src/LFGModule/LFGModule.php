@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE
  */
 
-namespace LFGamers\Discord\ModerationModule;
+namespace LFGamers\Discord\LFGModule;
 
 use Discord\Base\AbstractModule;
 

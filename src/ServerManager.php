@@ -13,10 +13,16 @@ namespace LFGamers\Discord;
 
 use Discord\Base\AppBundle\Manager\ServerManager as BaseServerManager;
 use Discord\Discord;
+use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Channel;
+use Discord\Parts\Channel\Message;
 use Discord\Parts\User\Member;
+use LFGamers\Discord\Model\Announcement;
+use LFGamers\Discord\Model\Config;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\Model\User;
+use React\EventLoop\LoopInterface;
+use React\EventLoop\Timer\TimerInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -25,6 +31,11 @@ use LFGamers\Discord\Model\User;
  */
 class ServerManager extends BaseServerManager
 {
+    /**
+     * @var TimerInterface
+     */
+    protected $announcementsTimer;
+
     /**
      * {@inheritdoc}
      */
@@ -45,6 +56,12 @@ class ServerManager extends BaseServerManager
         }
 
         $this->getManager()->flush();
+
+        /** @var Server $server */
+        $server = $this->getDatabaseServer();
+        if ($server->isAnnouncementsEnabled()) {
+            $this->startAnnouncements();
+        }
     }
 
     public function onMemberDelete(Member $member)
@@ -136,5 +153,98 @@ class ServerManager extends BaseServerManager
                 $channel->sendMessage($message);
             }
         );
+    }
+
+    public function startAnnouncements()
+    {
+        /** @var Config|null $config */
+        $config = $this->container->get('helper.config')->get('announcements.'.$this->getClientServer()->id);
+        if (empty($config)) {
+            return;
+        }
+        $config = json_decode($config->getValue(), true);
+
+        /** @var LoopInterface $loop */
+        $loop = $this->discord->loop;
+        $this->logger->info('Starting announcement timer');
+        $this->announcementsTimer = $loop->addPeriodicTimer(
+            $config['frequency'],
+            function () use ($config) {
+                $this->logger->info('Displaying random announcement');
+                $announcement = $this->getRandomAnnouncement();
+                $this->getManager()->refresh($announcement);
+                $channel = $this->getAnnouncementChannel();
+
+                if ($announcement->getLastAnnouncement() !== null) {
+                    $opts = ['after' => $announcement->getLastAnnouncement(), 'cache' => false];
+                    return $channel->getMessageHistory($opts)
+                        ->then(
+                            function (Collection $messages) use ($announcement, $channel, $config) {
+                                if ($messages->count() < (int) $config['minimum_messages']) {
+                                    return;
+                                }
+
+                                $this->sendAnnouncement($channel, $announcement);
+                            }
+                        );
+                }
+
+                $this->sendAnnouncement($channel, $announcement);
+            }
+        );
+    }
+
+    /**
+     * @param Channel $channel
+     * @param Announcement $announcement
+     */
+    private function sendAnnouncement(Channel $channel, Announcement $announcement)
+    {
+        $channel->sendMessage("Announcement: \n\n".$announcement->getContent())
+            ->then(
+                function (Message $message) use ($announcement) {
+                    $announcement->setLastAnnouncement($message->id);
+                    $this->getManager()->flush($announcement);
+                }
+            );
+    }
+
+    public function stopAnnouncements()
+    {
+        $this->announcementsTimer->cancel();
+    }
+
+    /**
+     * @return Announcement
+     */
+    private function getRandomAnnouncement()
+    {
+        /** @var Server $server */
+        $server = $this->getDatabaseServer();
+        $this->getManager()->refresh($server);
+        $announcements = $server->getAnnouncements();
+
+        $keys = [];
+        foreach ($announcements as $i => $announcement) {
+            for ($u = 0; $u <= $announcement->getPriority(); $u++) {
+                $keys[] = $i;
+            }
+        }
+
+        $random = $announcements[$keys[rand(0, count($keys) - 1)]];
+        $this->getManager()->refresh($random);
+
+        return $random;
+    }
+
+    /**
+     * @return Channel
+     */
+    private function getAnnouncementChannel()
+    {
+        /** @var Server $server */
+        $server = $this->getDatabaseServer();
+
+        return $this->getClientServer()->channels->get('id', $server->getAnnouncementsChannel());
     }
 }

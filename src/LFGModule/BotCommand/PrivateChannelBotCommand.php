@@ -9,16 +9,14 @@
  * with this source code in the file LICENSE
  */
 
-namespace LFGamers\Discord\ModerationModule\BotCommand;
+namespace LFGamers\Discord\LFGModule\BotCommand;
 
 use Discord\Base\Request;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Permissions\ChannelPermission;
-use Discord\Parts\Permissions\RolePermission;
 use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\User;
-use LFGamers\Discord\Model\UserLog;
 
 /**
  * @author Aaron Scherer <aaron@lfgame.rs>
