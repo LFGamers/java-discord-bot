@@ -67,7 +67,7 @@ EOF
             return;
         }
 
-        $mentionedClientUser = $this->discord->client->users->get('id', $matches[2]);
+        $mentionedClientUser = $this->discord->users->get('id', $matches[2]);
         $mentionedUser = $this->getManager()->getRepository(User::class)->findOneByIdentifier($mentionedClientUser->id);
         if (empty($mentionedUser)) {
             $mentionedUser = new User();
@@ -119,7 +119,7 @@ EOF
             return;
         }
 
-        $mentionedClientUser = $this->discord->client->users->get('id', $matches[2]);
+        $mentionedClientUser = $this->discord->users->get('id', $matches[2]);
         $mentionedUser = $this->getManager()->getRepository(User::class)->findOneByIdentifier($mentionedClientUser->id);
         if (empty($mentionedUser)) {
             $mentionedUser = new User();
