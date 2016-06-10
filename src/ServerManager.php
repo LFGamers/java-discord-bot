@@ -81,7 +81,6 @@ class ServerManager extends BaseServerManager
         /** @var Member $oldUser */
         $oldUser = $discord->guilds->get('id', $this->clientServer->id)->members->get('id', $member->id);
 
-        var_dump([$member->nick, $oldUser->nick]);
         $type = null;
         if ($member->username !== $oldUser->username) {
             $type = 'name';
@@ -147,12 +146,7 @@ class ServerManager extends BaseServerManager
             return;
         }
 
-        $this->discord->ws->loop->addTimer(
-            1,
-            function () use ($channel, $message) {
-                $channel->sendMessage($message);
-            }
-        );
+        $channel->sendMessage($message);
     }
 
     public function startAnnouncements()
@@ -166,7 +160,7 @@ class ServerManager extends BaseServerManager
 
         /** @var LoopInterface $loop */
         $loop = $this->discord->loop;
-        $this->logger->info('Starting announcement timer');
+        $this->logger->info('Starting announcement timer, running every '.$config['frequency'].'s');
         $this->announcementsTimer = $loop->addPeriodicTimer(
             $config['frequency'],
             function () use ($config) {
@@ -177,6 +171,7 @@ class ServerManager extends BaseServerManager
 
                 if ($announcement->getLastAnnouncement() !== null) {
                     $opts = ['after' => $announcement->getLastAnnouncement(), 'cache' => false];
+
                     return $channel->getMessageHistory($opts)
                         ->then(
                             function (Collection $messages) use ($announcement, $channel, $config) {
@@ -195,7 +190,7 @@ class ServerManager extends BaseServerManager
     }
 
     /**
-     * @param Channel $channel
+     * @param Channel      $channel
      * @param Announcement $announcement
      */
     private function sendAnnouncement(Channel $channel, Announcement $announcement)

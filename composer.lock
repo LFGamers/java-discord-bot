@@ -1806,12 +1806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "37e493debb85249a4a189bf66d11f25b2e383d0c"
+                "reference": "85cbfd8b6f948962f582a40d07b98c07503f3d77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/37e493debb85249a4a189bf66d11f25b2e383d0c",
-                "reference": "37e493debb85249a4a189bf66d11f25b2e383d0c",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/85cbfd8b6f948962f582a40d07b98c07503f3d77",
+                "reference": "85cbfd8b6f948962f582a40d07b98c07503f3d77",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1849,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-06-10 02:22:14"
+            "time": "2016-06-10 04:02:30"
         },
         {
             "name": "monolog/monolog",
@@ -3312,7 +3312,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:uniquoooo/DiscordPHP-Rewrite.git",
-                "reference": "60515ef6d46bc246ac23e5b5407a0e24876cff29"
+                "reference": "80ac5893c0e3b1669c4e5d85cfac6feaf137a0a7"
             },
             "require": {
                 "cache/adapter-bundle": "^0.3.3",
@@ -3364,7 +3364,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-06-10 00:23:37"
+            "time": "2016-06-10 03:59:18"
         },
         {
             "name": "twig/twig",
