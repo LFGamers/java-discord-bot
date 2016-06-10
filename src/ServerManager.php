@@ -162,16 +162,21 @@ class ServerManager extends BaseServerManager
         $loop = $this->discord->loop;
         $this->logger->info('Starting announcement timer, running every '.$config['frequency'].'s');
         $this->announcementsTimer = $loop->addPeriodicTimer($config['frequency'], [$this, 'displayAnnouncement']);
-        $this->displayAnnouncement($config);
+        $this->displayAnnouncement();
     }
 
     /**
-     * @param array $config
-     *
      * @return \React\Promise\PromiseInterface|static
      */
-    public function displayAnnouncement(array $config)
+    public function displayAnnouncement()
     {
+        /** @var Config|array|null $config */
+        $config = $this->container->get('helper.config')->get('announcements.'.$this->getClientServer()->id);
+        if (empty($config)) {
+            return;
+        }
+        $config = json_decode($config->getValue(), true);
+
         $this->logger->info('Displaying random announcement');
         $announcement = $this->getRandomAnnouncement();
         $this->getManager()->refresh($announcement);
