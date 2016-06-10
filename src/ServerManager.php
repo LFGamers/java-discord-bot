@@ -151,7 +151,7 @@ class ServerManager extends BaseServerManager
 
     public function startAnnouncements()
     {
-        /** @var Config|null $config */
+        /** @var Config|array|null $config */
         $config = $this->container->get('helper.config')->get('announcements.'.$this->getClientServer()->id);
         if (empty($config)) {
             return;
@@ -161,32 +161,33 @@ class ServerManager extends BaseServerManager
         /** @var LoopInterface $loop */
         $loop = $this->discord->loop;
         $this->logger->info('Starting announcement timer, running every '.$config['frequency'].'s');
-        $this->announcementsTimer = $loop->addPeriodicTimer(
-            $config['frequency'],
-            function () use ($config) {
-                $this->logger->info('Displaying random announcement');
-                $announcement = $this->getRandomAnnouncement();
-                $this->getManager()->refresh($announcement);
-                $channel = $this->getAnnouncementChannel();
+        $this->announcementsTimer = $loop->addPeriodicTimer($config['frequency'], [$this, 'displayAnnouncement']);
+        $this->displayAnnouncement($config);
+    }
 
-                if ($announcement->getLastAnnouncement() !== null) {
-                    $opts = ['after' => $announcement->getLastAnnouncement(), 'cache' => false];
+    protected function displayAnnouncement(array $config)
+    {
+        $this->logger->info('Displaying random announcement');
+        $announcement = $this->getRandomAnnouncement();
+        $this->getManager()->refresh($announcement);
+        $channel = $this->getAnnouncementChannel();
 
-                    return $channel->getMessageHistory($opts)
-                        ->then(
-                            function (Collection $messages) use ($announcement, $channel, $config) {
-                                if ($messages->count() < (int) $config['minimum_messages']) {
-                                    return;
-                                }
+        if ($announcement->getLastAnnouncement() !== null) {
+            $opts = ['after' => $announcement->getLastAnnouncement(), 'cache' => false];
 
-                                $this->sendAnnouncement($channel, $announcement);
-                            }
-                        );
-                }
+            return $channel->getMessageHistory($opts)
+                ->then(
+                    function (Collection $messages) use ($announcement, $channel, $config) {
+                        if ($messages->count() < (int) $config['minimum_messages']) {
+                            return;
+                        }
 
-                $this->sendAnnouncement($channel, $announcement);
-            }
-        );
+                        $this->sendAnnouncement($channel, $announcement);
+                    }
+                );
+        }
+
+        $this->sendAnnouncement($channel, $announcement);
     }
 
     /**
