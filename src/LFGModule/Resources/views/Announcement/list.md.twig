@@ -1,0 +1,7 @@
+Announcements - Page {{ page }}:
+
+{% set start = (page - 1) * 5 %}
+{% set end = (page) * 5 %}
+{% for index, ann in announcements|slice(start, end) %}
+    **{{ ((page - 1) * 5) + (index + 1) }}**: {{ ann.title }} - *{{ ann.id }}*
+{% endfor %}

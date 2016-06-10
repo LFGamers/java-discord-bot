@@ -39,6 +39,7 @@ Use the following to manage announcements:
 `announcements toggle` to toggle announcements in the current server
 `announcements channel [<#channel>]` to set the announcements channel, or get it
 `announcements list [--page=\d+]` to list all the announcements (paginated)
+`announcements view <\d+>` to view an announcement
 `announcements remove <\d+>` removes the given announcement
 `announcements add <title> <\S\s+>` creates an announcement with the given title
 `announcements config <option> [<value>]` gets the given config option, or sets it if a value is passed
@@ -52,23 +53,63 @@ EOF
     public function setHandlers()
     {
         $this->responds(
-            '/^announcements (\s+)?(help)?$/i',
+            '/^ann(?:ouncements)? (\s+)?(help)?$/i',
             function (Request $request) {
                 $request->reply($this->getHelp());
             }
         );
 
+        $this->responds('/^ann(?:ouncements)? status$/i', [$this, 'getStatus']);
         $this->responds('/^ann(?:ouncements)? toggle$/i', [$this, 'toggleAnnouncements']);
         $this->responds('/^ann(?:ouncements)? channel$/i', [$this, 'getAnnouncementsChannel']);
         $this->responds('/^ann(?:ouncements)? channel <#(?<channel>\d+)>$/i', [$this, 'setAnnouncementsChannel']);
+        $this->responds('/^ann(?:ouncements)? config (?<option>[A-Za-z-_]+)$/i', [$this, 'getAnnouncementsConfig']);
+        $this->responds('/^ann(?:ouncements)? list(?: --page=(?<page>\d+))?$/i', [$this, 'listAnnouncements']);
+        $this->responds('/^ann(?:ouncements)? (?:view|get) (?<id>\d+)$/i', [$this, 'getAnnouncement']);
+
         $this->responds(
             '/^ann(?:ouncements)? (?:add|create) (?<title>[A-Za-z-_]+) (?<content>[\S\s]+)$/i',
             [$this, 'addAnnouncement']
         );
-        $this->responds('/^ann(?:ouncements)? config (?<option>[A-Za-z-_]+)$/i', [$this, 'getAnnouncementsConfig']);
         $this->responds(
             '/^ann(?:ouncements)? config (?<option>[A-Za-z-_]+) (?<value>.*)/i',
             [$this, 'setAnnouncementsConfig']
+        );
+    }
+
+    public function getStatus(Request $request)
+    {
+        /** @var Server $server */
+        $server = $request->getDatabaseServer();
+
+        $request->reply('Announcements are currently '.($server->isAnnouncementsEnabled() ? 'enabled' : 'disabled'));
+    }
+
+    public function getAnnouncement(Request $request, array $matches)
+    {
+        /** @var Server $server */
+        $server = $request->getDatabaseServer();
+        $id     = $matches['id'];
+        foreach ($server->getAnnouncements() as $announcement) {
+            if ($announcement->getId() === (int) $id) {
+                return $request->reply("Announcement Demo:\n\n".$announcement->getContent());
+            }
+        }
+
+        $request->reply("There is no announcement with that ID.");
+    }
+
+    public function listAnnouncements(Request $request, array $matches)
+    {
+        /** @var Server $server */
+        $server = $request->getDatabaseServer();
+        $page   = array_key_exists('page', $matches) ? (int) $matches['page'] : 1;
+
+        $request->reply(
+            $request->renderTemplate(
+                '@LFGModule/Announcement/list.md.twig',
+                ['page' => $page, 'announcements' => $server->getAnnouncements()]
+            )
         );
     }
 
