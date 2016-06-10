@@ -165,7 +165,12 @@ class ServerManager extends BaseServerManager
         $this->displayAnnouncement($config);
     }
 
-    protected function displayAnnouncement(array $config)
+    /**
+     * @param array $config
+     *
+     * @return \React\Promise\PromiseInterface|static
+     */
+    public function displayAnnouncement(array $config)
     {
         $this->logger->info('Displaying random announcement');
         $announcement = $this->getRandomAnnouncement();
