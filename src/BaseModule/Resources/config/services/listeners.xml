@@ -3,10 +3,17 @@
 
     <services>
         <service id="listener.ready" class="LFGamers\Discord\BaseModule\Listener\BotReadyListener">
-            <argument type="service" id="helper.acl" />
-            <argument type="service" id="discord" />
+            <argument type="service" id="helper.acl"/>
+            <argument type="service" id="discord"/>
 
             <tag name="kernel.event_listener" event="ready_finish" method="onBotReady"/>
+        </service>
+        <service id="listener.private_channel" class="LFGamers\Discord\BaseModule\Listener\PrivateChannelListener">
+            <argument type="service" id="discord"/>
+            <argument type="service" id="default_manager"/>
+            <argument type="service" id="monolog.logger.bot"/>
+
+            <tag name="kernel.event_listener" event="manager.server.loaded" method="onServerManagerReady"/>
         </service>
     </services>
 </container>

@@ -194,6 +194,10 @@ class ServerManager extends BaseServerManager
 
                         $this->sendAnnouncement($channel, $announcement);
                     }
+                )->otherwise(
+                    function () use ($channel, $announcement) {
+                        $this->sendAnnouncement($channel, $announcement);
+                    }
                 );
         }
 

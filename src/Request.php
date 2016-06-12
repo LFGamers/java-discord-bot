@@ -74,6 +74,19 @@ class Request extends BaseRequest
     }
 
     /**
+     * @return array|User[]
+     */
+    public function getMentions()
+    {
+        $mentions = [];
+        foreach ($this->getMessage()->mentions as $mention) {
+            $mentions[] = $this->getDiscord()->users->get('id', $mention->id);
+        }
+
+        return $mentions;
+    }
+
+    /**
      * @return bool
      */
     public function isAdmin()

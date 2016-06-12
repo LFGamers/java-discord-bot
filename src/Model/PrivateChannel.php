@@ -34,9 +34,22 @@ class PrivateChannel
      * @var User
      *
      * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
+
+    /**
+     * @var Server
+     *
+     * @ORM\OneToOne(targetEntity="Server")
+     */
+    protected $server;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     */
+    protected $insertDate;
 
     /**
      * @var int
@@ -85,6 +98,26 @@ class PrivateChannel
     }
 
     /**
+     * @return Server
+     */
+    public function getServer() : Server
+    {
+        return $this->server;
+    }
+
+    /**
+     * @param Server $server
+     *
+     * @return PrivateChannel
+     */
+    public function setServer(Server $server) : PrivateChannel
+    {
+        $this->server = $server;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getChannelId() : int
@@ -100,6 +133,26 @@ class PrivateChannel
     public function setChannelId(int $channelId) : PrivateChannel
     {
         $this->channelId = $channelId;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getInsertDate() : \DateTime
+    {
+        return $this->insertDate;
+    }
+
+    /**
+     * @param \DateTime $insertDate
+     *
+     * @return PrivateChannel
+     */
+    public function setInsertDate(\DateTime $insertDate) : PrivateChannel
+    {
+        $this->insertDate = $insertDate;
 
         return $this;
     }
