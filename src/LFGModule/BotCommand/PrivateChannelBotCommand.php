@@ -37,8 +37,9 @@ class PrivateChannelBotCommand extends AbstractBotCommand
                 <<<EOF
 Use the following to manage private voice channels:
 
-`private create <name> @user1 [@user2...]` to create a private voice channel allowing all tagged users to have access
+`private <name> @user1 [@user2...]` to create a private voice channel allowing all tagged users to have access
 `private add @user` to add a user to your private channel
+`private remove @user` to remove a user from your private channel
 `private delete [name]` to delete your voice channel. If admin will delete named channel
 EOF
             );
