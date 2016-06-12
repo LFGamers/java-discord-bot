@@ -192,7 +192,7 @@ EOF
         /** @var Channel $channel */
         $channel = $this->discord->factory(
             Channel::class,
-            ['name' => trim($matches['name']), 'type' => Channel::TYPE_VOICE]
+            ['name' => 'Private - '.trim($matches['name']), 'type' => Channel::TYPE_VOICE]
         );
         $request->getServer()->channels->save($channel)
             ->then(
@@ -200,10 +200,9 @@ EOF
                     $this->logger->info("Creating everyone perm");
                     $promises = [];
 
-
                     // Negate everyone
-                    $perm = $this->discord->factory(ChannelPermission::class, ['voice_connect' => false]);
-                    $everyone = $request->getServer()->roles->get('name', '@everyone');
+                    $perm       = $this->discord->factory(ChannelPermission::class, ['voice_connect' => false]);
+                    $everyone   = $request->getServer()->roles->get('name', '@everyone');
                     $promises[] = $channel->setPermissions($everyone, $perm);
 
                     $this->logger->info("Creating author perm");
@@ -225,18 +224,20 @@ EOF
 
                     $request->reply("Channel being created. Please wait.");
                     $promise = \React\Promise\all($promises);
-                    $promise->then(function() use ($request, $user, $channel) {
-                        $request->reply("Channel created.");
-                        $privateChannel = new PrivateChannel();
-                        $privateChannel->setChannelId($channel->id);
-                        $privateChannel->setUser($user);
-                        $privateChannel->setServer($request->getDatabaseServer());
-                        $privateChannel->setInsertDate(new \DateTime());
-                        $this->getManager()->persist($privateChannel);
+                    $promise->then(
+                        function () use ($request, $user, $channel) {
+                            $request->reply("Channel created.");
+                            $privateChannel = new PrivateChannel();
+                            $privateChannel->setChannelId($channel->id);
+                            $privateChannel->setUser($user);
+                            $privateChannel->setServer($request->getDatabaseServer());
+                            $privateChannel->setInsertDate(new \DateTime());
+                            $this->getManager()->persist($privateChannel);
 
-                        $user->setPrivateChannel($privateChannel);
-                        $this->getManager()->flush($user);
-                    })->otherwise(
+                            $user->setPrivateChannel($privateChannel);
+                            $this->getManager()->flush($user);
+                        }
+                    )->otherwise(
                         function ($error) use ($request, $channel) {
                             $request->reply("Failed to create channel.");
                             $request->getServer()->channels->delete($channel);
