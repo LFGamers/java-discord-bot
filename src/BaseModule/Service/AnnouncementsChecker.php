@@ -89,8 +89,6 @@ class AnnouncementsChecker
      */
     public function checkAnnouncements()
     {
-        $this->logger->info("Checking announcements: ".$this->serverManager->getClientServer()->name);
-
         /** @var Server $dbServer */
         $dbServer = $this->serverManager->getDatabaseServer();
         $config   = $this->getConfig();
@@ -101,6 +99,8 @@ class AnnouncementsChecker
         if (!$dbServer->isAnnouncementsEnabled()) {
             return;
         }
+
+        $this->logger->info("Checking announcements: ".$this->serverManager->getClientServer()->name);
 
         if ($dbServer->getAnnouncementsChannel() === null) {
             return;
