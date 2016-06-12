@@ -15,5 +15,13 @@
 
             <tag name="kernel.event_listener" event="manager.server.loaded" method="onServerManagerReady"/>
         </service>
+        <service id="listener.announcements" class="LFGamers\Discord\BaseModule\Listener\AnnouncementsListener">
+            <argument type="service" id="discord"/>
+            <argument type="service" id="default_manager"/>
+            <argument type="service" id="helper.config"/>
+            <argument type="service" id="monolog.logger.bot"/>
+
+            <tag name="kernel.event_listener" event="manager.server.loaded" method="onServerManagerReady"/>
+        </service>
     </services>
 </container>

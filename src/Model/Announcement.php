@@ -61,12 +61,6 @@ class Announcement
      */
     protected $author;
 
-    /**
-     * @var int
-     * @ORM\Column(type="bigint", nullable=true)
-     */
-    protected $lastAnnouncement;
-
     public function __construct()
     {
         $this->priority = 0;
@@ -188,26 +182,6 @@ class Announcement
     public function setAuthor(int $author) : Announcement
     {
         $this->author = $author;
-
-        return $this;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getLastAnnouncement()
-    {
-        return $this->lastAnnouncement;
-    }
-
-    /**
-     * @param int $lastAnnouncement
-     *
-     * @return Announcement
-     */
-    public function setLastAnnouncement(int $lastAnnouncement) : Announcement
-    {
-        $this->lastAnnouncement = $lastAnnouncement;
 
         return $this;
     }

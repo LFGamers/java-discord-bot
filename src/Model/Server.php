@@ -49,6 +49,12 @@ class Server extends BaseServer
     protected $announcements;
 
     /**
+     * @var int
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    protected $lastAnnouncementMessage;
+
+    /**
      * Server constructor.
      */
     public function __construct()
@@ -101,19 +107,19 @@ class Server extends BaseServer
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getAnnouncementsChannel() : string
+    public function getAnnouncementsChannel()
     {
         return $this->announcementsChannel;
     }
 
     /**
-     * @param string $announcementsChannel
+     * @param string|null $announcementsChannel
      *
      * @return Server
      */
-    public function setAnnouncementsChannel(string $announcementsChannel) : Server
+    public function setAnnouncementsChannel(string $announcementsChannel = null) : Server
     {
         $this->announcementsChannel = $announcementsChannel;
 
@@ -164,6 +170,26 @@ class Server extends BaseServer
         if ($this->announcements->contains($announcement)) {
             $this->announcements->removeElement($announcement);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLastAnnouncementMessage()
+    {
+        return $this->lastAnnouncementMessage;
+    }
+
+    /**
+     * @param int|null $lastAnnouncementMessage
+     *
+     * @return Server
+     */
+    public function setLastAnnouncementMessage(int $lastAnnouncementMessage = null) : Server
+    {
+        $this->lastAnnouncementMessage = $lastAnnouncementMessage;
 
         return $this;
     }

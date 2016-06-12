@@ -14,8 +14,8 @@ namespace LFGamers\Discord\BaseModule\Listener;
 use Discord\Base\AppBundle\Event\ServerManagerLoaded;
 use Discord\Discord;
 use Doctrine\Common\Persistence\ObjectManager;
-use LFGamers\Discord\BaseModule\Service\PrivateChannelChecker;
-use LFGamers\Discord\ServerManager;
+use LFGamers\Discord\BaseModule\Service\AnnouncementsChecker;
+use LFGamers\Discord\Helper\ConfigHelper;
 use Monolog\Logger;
 
 /**
@@ -23,7 +23,7 @@ use Monolog\Logger;
  *
  * BotReadyListener Class
  */
-class PrivateChannelListener
+class AnnouncementsListener
 {
     /**
      * @var Discord
@@ -36,6 +36,11 @@ class PrivateChannelListener
     private $manager;
 
     /**
+     * @var ConfigHelper
+     */
+    private $configHelper;
+
+    /**
      * @var Logger
      */
     private $logger;
@@ -43,13 +48,15 @@ class PrivateChannelListener
     /**
      * @param Discord       $discord
      * @param ObjectManager $manager
+     * @param ConfigHelper  $configHelper
      * @param Logger        $logger
      */
-    public function __construct(Discord $discord, ObjectManager $manager, Logger $logger)
+    public function __construct(Discord $discord, ObjectManager $manager, ConfigHelper $configHelper, Logger $logger)
     {
-        $this->discord = $discord;
-        $this->manager = $manager;
-        $this->logger  = $logger;
+        $this->discord      = $discord;
+        $this->manager      = $manager;
+        $this->configHelper = $configHelper;
+        $this->logger       = $logger;
     }
 
     /**
@@ -57,6 +64,12 @@ class PrivateChannelListener
      */
     public function onServerManagerReady(ServerManagerLoaded $event)
     {
-        new PrivateChannelChecker($this->discord, $this->manager, $this->logger, $event->getManager());
+        new AnnouncementsChecker(
+            $this->discord,
+            $this->manager,
+            $this->configHelper,
+            $this->logger,
+            $event->getManager()
+        );
     }
 }

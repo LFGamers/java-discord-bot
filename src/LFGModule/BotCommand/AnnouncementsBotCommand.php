@@ -156,13 +156,13 @@ EOF
                     "Please set the announcement channel. `announcements channel <#channel>`"
                 );
             }
+            if ($server->getAnnouncements()->count() <= 0) {
+                return $request->reply("Please add some announcements first.");
+            }
         }
 
         $server->setAnnouncementsEnabled($enabled);
         $this->getManager()->flush($server);
-
-        // Starts or stops the announcement loop
-        $request->getServerManager()->{($enabled ? 'start' : 'stop').'Announcements'}();
 
         $request->reply('Announcements are now '.($enabled ? 'enabled' : 'disabled').'.');
     }

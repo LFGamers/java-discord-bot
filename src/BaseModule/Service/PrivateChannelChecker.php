@@ -67,7 +67,7 @@ class PrivateChannelChecker
 
     public function checkServerChannels()
     {
-        $this->logger->info("Checking server channels: ".$this->serverManager->getClientServer()->id);
+        $this->logger->info("Checking server channels: ".$this->serverManager->getClientServer()->name);
         $repo   = $this->manager->getRepository(PrivateChannel::class);
         $server = $this->serverManager->getClientServer();
 
@@ -85,7 +85,7 @@ class PrivateChannelChecker
             }
 
             $insert = Carbon::instance($privateChannel->getInsertDate());
-            $this->logger->info(
+            $this->logger->debug(
                 sprintf(
                     "Checking: [%s] (%s) - %d users - %s",
                     $server->name,
