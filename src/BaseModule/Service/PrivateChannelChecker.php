@@ -82,6 +82,7 @@ class PrivateChannelChecker
             if (empty($channel) || !is_object($channel)) {
                 $privateChannel->getUser()->setPrivateChannel(null);
                 $this->manager->remove($privateChannel);
+                continue;
             }
 
             $insert = Carbon::instance($privateChannel->getInsertDate());
