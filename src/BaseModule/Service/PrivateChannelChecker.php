@@ -67,7 +67,7 @@ class PrivateChannelChecker
 
     public function checkServerChannels()
     {
-        $this->logger->info("Checking server channels: ".$this->serverManager->getClientServer()->name);
+        //$this->logger->info("Checking server channels: ".$this->serverManager->getClientServer()->name);
         $repo   = $this->manager->getRepository(PrivateChannel::class);
         $server = $this->serverManager->getClientServer();
 

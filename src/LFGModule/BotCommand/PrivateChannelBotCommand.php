@@ -209,36 +209,37 @@ EOF
             ->then(
                 function (Channel $channel) use ($request, $matches, $user) {
                     $this->logger->info("Creating everyone perm");
-                    $promises = [];
-
-                    // Negate everyone
-                    $perm       = $this->discord->factory(ChannelPermission::class, ['voice_connect' => false]);
-                    $everyone   = $request->getServer()->roles->get('name', '@everyone');
-                    $promises[] = $channel->setPermissions($everyone, $perm);
-
-                    $this->logger->info("Creating author perm");
-                    $perm = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
-                    // Allow author
-                    $promises[] = $channel->setPermissions(
-                        UserHelper::getMember($request->getAuthor(), $request->getServer()),
-                        $perm
-                    );
-
-                    $this->logger->info("Creating mentioned perms");
-                    // Allow mentioned
-                    $this->createMentionPerms($request, $channel)
+                    $perm     = $this->discord->factory(ChannelPermission::class, ['voice_connect' => false]);
+                    $everyone = $request->getServer()->roles->get('name', '@everyone');
+                    $channel->setPermissions($everyone, $perm)
                         ->then(
-                            function () use ($request, $user, $channel) {
-                                $request->reply("Channel created.");
-                                $privateChannel = new PrivateChannel();
-                                $privateChannel->setChannelId($channel->id);
-                                $privateChannel->setUser($user);
-                                $privateChannel->setServer($request->getDatabaseServer());
-                                $privateChannel->setInsertDate(new \DateTime());
-                                $this->getManager()->persist($privateChannel);
+                            function () use ($request, $matches, $channel, $user) {
+                                $this->logger->info("Creating author perm");
+                                $perm = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
+                                $channel->setPermissions(
+                                    UserHelper::getMember($request->getAuthor(), $request->getServer()),
+                                    $perm
+                                )->then(
+                                    function () use ($request, $matches, $channel, $user) {
+                                        $this->logger->info("Creating mentioned perms");
+                                        // Allow mentioned
+                                        $this->createMentionPerms($request, $channel)
+                                            ->then(
+                                                function () use ($request, $user, $channel) {
+                                                    $request->reply("Channel created.");
+                                                    $privateChannel = new PrivateChannel();
+                                                    $privateChannel->setChannelId($channel->id);
+                                                    $privateChannel->setUser($user);
+                                                    $privateChannel->setServer($request->getDatabaseServer());
+                                                    $privateChannel->setInsertDate(new \DateTime());
+                                                    $this->getManager()->persist($privateChannel);
 
-                                $user->setPrivateChannel($privateChannel);
-                                $this->getManager()->flush($user);
+                                                    $user->setPrivateChannel($privateChannel);
+                                                    $this->getManager()->flush($user);
+                                                }
+                                            );
+                                    }
+                                );
                             }
                         )->otherwise(
                             function ($error) use ($request, $channel) {
