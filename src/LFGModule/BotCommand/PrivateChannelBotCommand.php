@@ -18,6 +18,8 @@ use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\PrivateChannel;
 use LFGamers\Discord\Model\User;
+use React\Promise\Deferred;
+use React\Promise\Promise;
 
 /**
  * @author Aaron Scherer <aaron@lfgame.rs>
@@ -57,10 +59,33 @@ EOF
             }
         );
 
+        $this->responds('/^private info/', [$this, 'getPrivateChannelInfo']);
         $this->responds('/^private delete/', [$this, 'deletePrivateChannel']);
         $this->responds('/^private add/', [$this, 'addMemberToPrivateChannel']);
         $this->responds('/^private remove/', [$this, 'removeMemberFromPrivateChannel']);
         $this->responds('/^private (?<name>[A-Za-z0-9-_ ]+)/', [$this, 'createPrivateChannel']);
+    }
+
+    protected function getPrivateChannelInfo(Request $request)
+    {
+        $repo = $this->getManager()->getRepository(User::class);
+
+        /** @var User $user */
+        $user = $repo->findOneByIdentifier($request->getAuthor()->id);
+        if (empty($user)) {
+            $user = new User();
+            $user->setIdentifier($request->getAuthor()->id);
+            $user->setServer($request->getDatabaseServer());
+            $this->getManager()->persist($user);
+            $this->getManager()->flush($user);
+        }
+
+        if (empty($user->getPrivateChannel())) {
+            return $request->reply("You don't have a private voice channel.");
+        }
+
+        $channel = $request->getServer()->channels->get('id', $user->getPrivateChannel()->getChannelId());
+        var_dump($channel);
     }
 
     protected function deletePrivateChannel(Request $request, array $matches)
@@ -114,20 +139,12 @@ EOF
 
         $this->logger->info("Creating mentioned perms");
         // Allow mentioned
-        $promises = [];
-        foreach ($request->getMentions() as $mention) {
-            $perm   = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
-            $member = UserHelper::getMember($mention, $request->getServer());
-            $this->logger->info("Allowing: ".$member);
-            $promises[] = $channel->setPermissions($member, $perm);
-        }
-
-        $promise = \React\Promise\all($promises);
-        $promise->then(
-            function () use ($request) {
-                $request->reply("Permissions updated.");
-            }
-        );
+        $this->createMentionPerms($request, $channel)
+            ->then(
+                function () use ($request) {
+                    $request->reply("Permissions updated.");
+                }
+            );
     }
 
     protected function removeMemberFromPrivateChannel(Request $request, array $matches)
@@ -151,25 +168,19 @@ EOF
 
         /** @var Channel $channel */
         $channel = $request->getServer()->channels->get('id', $user->getPrivateChannel()->getChannelId());
-        $general = $request->getServer()->channels->get('name', 'General');
 
         $this->logger->info("Removing mentioned perms");
         // Allow mentioned
-        $promises = [];
-        foreach ($request->getMentions() as $mention) {
-            $perm   = $this->discord->factory(ChannelPermission::class, ['voice_connect' => false]);
-            $member = UserHelper::getMember($mention, $request->getServer());
-            $this->logger->info("Denying: ".$member);
-            $promises[] = $channel->setPermissions($member, $perm);
-            $general->moveMember($member);
-        }
-
-        $promise = \React\Promise\all($promises);
-        $promise->then(
-            function () use ($request) {
-                $request->reply("Permissions updated.");
-            }
-        );
+        $this->createMentionPerms($request, $channel, ['voice_connect' => false])
+            ->then(
+                function ($members) use ($request) {
+                    $general = $request->getServer()->channels->get('name', 'General');
+                    $request->reply("Permissions updated.");
+                    foreach ($members as $member) {
+                        $general->moveMember($member);
+                    }
+                }
+            );
     }
 
     protected function createPrivateChannel(Request $request, array $matches)
@@ -215,36 +226,65 @@ EOF
 
                     $this->logger->info("Creating mentioned perms");
                     // Allow mentioned
-                    foreach ($request->getMentions() as $mention) {
-                        $perm   = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
-                        $member = UserHelper::getMember($mention, $request->getServer());
-                        $this->logger->info("Allowing: ".$member);
-                        $promises[] = $channel->setPermissions($member, $perm);
-                    }
+                    $this->createMentionPerms($request, $channel)
+                        ->then(
+                            function () use ($request, $user, $channel) {
+                                $request->reply("Channel created.");
+                                $privateChannel = new PrivateChannel();
+                                $privateChannel->setChannelId($channel->id);
+                                $privateChannel->setUser($user);
+                                $privateChannel->setServer($request->getDatabaseServer());
+                                $privateChannel->setInsertDate(new \DateTime());
+                                $this->getManager()->persist($privateChannel);
 
-                    $request->reply("Channel being created. Please wait.");
-                    $promise = \React\Promise\all($promises);
-                    $promise->then(
-                        function () use ($request, $user, $channel) {
-                            $request->reply("Channel created.");
-                            $privateChannel = new PrivateChannel();
-                            $privateChannel->setChannelId($channel->id);
-                            $privateChannel->setUser($user);
-                            $privateChannel->setServer($request->getDatabaseServer());
-                            $privateChannel->setInsertDate(new \DateTime());
-                            $this->getManager()->persist($privateChannel);
-
-                            $user->setPrivateChannel($privateChannel);
-                            $this->getManager()->flush($user);
-                        }
-                    )->otherwise(
-                        function ($error) use ($request, $channel) {
-                            $request->reply("Failed to create channel.");
-                            $request->getServer()->channels->delete($channel);
-                            $this->logger->error($error);
-                        }
-                    );
+                                $user->setPrivateChannel($privateChannel);
+                                $this->getManager()->flush($user);
+                            }
+                        )->otherwise(
+                            function ($error) use ($request, $channel) {
+                                $request->reply("Failed to create channel.");
+                                $request->getServer()->channels->delete($channel);
+                                $this->logger->error($error);
+                            }
+                        );
                 }
             );
+    }
+
+    /**
+     * @param Request $request
+     * @param Channel $channel
+     *
+     * @param array   $perms
+     *
+     * @return Promise
+     */
+    private function createMentionPerms(
+        Request $request,
+        Channel $channel,
+        array $perms = ['voice_connect' => true]
+    ) : Promise
+    {
+        $deferred = new Deferred();
+        $mentions = $request->getMentions();
+        $members  = [];
+
+        $setPerm = function () use ($deferred, $request, $perms, &$members, &$setPerm, &$mentions, $channel) {
+            $mention = array_shift($mentions);
+
+            if (is_null($mention)) {
+                return $deferred->resolve($members);
+            }
+
+            $perm      = $this->discord->factory(ChannelPermission::class, $perms);
+            $member    = UserHelper::getMember($mention, $request->getServer());
+            $members[] = $member;
+            $this->logger->info("Allowing: ".$member->username);
+            $channel->setPermissions($member, $perm)->then($setPerm, [$deferred, 'reject']);
+        };
+
+        $setPerm();
+
+        return $deferred->promise();
     }
 }

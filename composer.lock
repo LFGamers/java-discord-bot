@@ -3312,7 +3312,7 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:uniquoooo/DiscordPHP-Rewrite.git",
-                "reference": "42ccdb3919643043b22207930c758ddd8788071e"
+                "reference": "65873d7f50a67c1d897e246f60175a3739fabaa4"
             },
             "require": {
                 "cache/adapter-bundle": "^0.3.3",
@@ -3364,7 +3364,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-06-12 21:47:31"
+            "time": "2016-06-13 07:34:43"
         },
         {
             "name": "twig/twig",

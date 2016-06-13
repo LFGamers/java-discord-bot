@@ -11,7 +11,6 @@
 
 namespace LFGamers\Discord\BaseModule\Service;
 
-use Carbon\Carbon;
 use Discord\Discord;
 use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Channel;
@@ -21,7 +20,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use LFGamers\Discord\Helper\ConfigHelper;
 use LFGamers\Discord\Model\Announcement;
 use LFGamers\Discord\Model\Config;
-use LFGamers\Discord\Model\PrivateChannel;
 use LFGamers\Discord\Model\Server;
 use LFGamers\Discord\ServerManager;
 use Monolog\Logger;
@@ -100,7 +98,7 @@ class AnnouncementsChecker
             return;
         }
 
-        $this->logger->info("Checking announcements: ".$this->serverManager->getClientServer()->name);
+        //$this->logger->info("Checking announcements: ".$this->serverManager->getClientServer()->name);
 
         if ($dbServer->getAnnouncementsChannel() === null) {
             return;
@@ -123,9 +121,9 @@ class AnnouncementsChecker
         $channel->getMessage($dbServer->getLastAnnouncementMessage())
             ->then(
                 function (Message $message) use ($config, $dbServer, $server, $channel) {
-                    $this->logger->debug(
+                    /*$this->logger->debug(
                         'Last message was '.$message->timestamp->diffForHumans().' (Req '.$config['frequency'].'s)'
-                    );
+                    );*/
                     if ($message->timestamp->diffInSeconds() < (int) $config['frequency']) {
                         return;
                     }
@@ -135,9 +133,9 @@ class AnnouncementsChecker
                     )
                         ->then(
                             function (Collection $messages) use ($config, $dbServer, $server, $channel) {
-                                $this->logger->debug(
+                                /*$this->logger->debug(
                                     $messages->count().' messages since last. (Req '.$config['minimum_messages'].')'
-                                );
+                                );*/
                                 if ($messages->count() >= $config['minimum_messages']) {
                                     $this->sendAnnouncement($dbServer, $server, $channel);
                                 }
@@ -169,6 +167,7 @@ class AnnouncementsChecker
      */
     private function sendAnnouncement(Server $dbServer, Guild $server, Channel $channel)
     {
+        /*
         $this->logger->debug(
             sprintf(
                 "Sending announcement to %s - #%s",
@@ -176,6 +175,7 @@ class AnnouncementsChecker
                 $channel->name
             )
         );
+        */
 
         $announcement = $this->getRandomAnnouncement($dbServer);
         $channel->sendMessage("Announcement: \n\n".$announcement->getContent())
