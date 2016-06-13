@@ -79,7 +79,7 @@ class PrivateChannelChecker
 
             /** @var Channel $channel */
             $channel = $server->channels->get('id', $privateChannel->getChannelId());
-            if (empty($channel)) {
+            if (empty($channel) || empty($channel->name) || empty($channel->members)) {
                 $privateChannel->getUser()->setPrivateChannel(null);
                 $this->manager->remove($privateChannel);
             }
