@@ -40,7 +40,7 @@ class PrivateChannel
     /**
      * @var Server
      *
-     * @ORM\OneToOne(targetEntity="Server")
+     * @ORM\ManyToOne(targetEntity="Server")
      */
     protected $server;
 
