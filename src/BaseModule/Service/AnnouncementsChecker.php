@@ -120,7 +120,10 @@ class AnnouncementsChecker
 
         $channel->getMessage($dbServer->getLastAnnouncementMessage())
             ->then(
-                function (Message $message) use ($config, $dbServer, $server, $channel) {
+                function (Message $message = null) use ($config, $dbServer, $server, $channel) {
+                    if ($message === null) {
+                        return $this->sendAnnouncement($dbServer, $server, $channel);
+                    }
                     /*$this->logger->debug(
                         'Last message was '.$message->timestamp->diffForHumans().' (Req '.$config['frequency'].'s)'
                     );*/
