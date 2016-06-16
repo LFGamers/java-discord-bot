@@ -12,13 +12,8 @@
 namespace LFGamers\Discord\Helper;
 
 use Discord\Parts\Guild\Guild;
-use Discord\Parts\Guild\Role;
-use Discord\Parts\Permissions\Permission;
-use Discord\Parts\User\Member;
 use Discord\Parts\User\User;
-use DusanKasan\Knapsack\Collection;
-use LFGamers\Discord\Exception\MemberNotFoundException;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use React\Promise\PromiseInterface;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -31,16 +26,10 @@ abstract class UserHelper
      * @param User  $user
      * @param Guild $guild
      *
-     * @return Member
-     * @throws MemberNotFoundException
+     * @return PromiseInterface
      */
-    public static function getMember(User $user, Guild $guild) : Member
+    public static function getMember(User $user, Guild $guild) : PromiseInterface
     {
-        $member = $guild->members->get('id', $user->id);
-        if (empty($member)) {
-            throw new MemberNotFoundException($user->id);
-        }
-
-        return $member;
+        return $guild->members->fetch($user->id);
     }
 }

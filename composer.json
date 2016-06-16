@@ -15,12 +15,6 @@
             "LFGamers\\Discord\\": "src/"
         }
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url":  "git@github.com:uniquoooo/DiscordPHP-Rewrite.git"
-        }
-    ],
     "license": "MIT",
     "authors": [
         {

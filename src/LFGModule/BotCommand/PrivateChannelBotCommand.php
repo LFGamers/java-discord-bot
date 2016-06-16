@@ -14,6 +14,7 @@ namespace LFGamers\Discord\LFGModule\BotCommand;
 use Discord\Base\Request;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Permissions\ChannelPermission;
+use Discord\Parts\User\Member;
 use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\PrivateChannel;
@@ -216,30 +217,33 @@ EOF
                             function () use ($request, $matches, $channel, $user) {
                                 $this->logger->info("Creating author perm");
                                 $perm = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
-                                $channel->setPermissions(
-                                    UserHelper::getMember($request->getAuthor(), $request->getServer()),
-                                    $perm
-                                )->then(
-                                    function () use ($request, $matches, $channel, $user) {
-                                        $this->logger->info("Creating mentioned perms");
-                                        // Allow mentioned
-                                        $this->createMentionPerms($request, $channel)
-                                            ->then(
-                                                function () use ($request, $user, $channel) {
-                                                    $request->reply("Channel created.");
-                                                    $privateChannel = new PrivateChannel();
-                                                    $privateChannel->setChannelId($channel->id);
-                                                    $privateChannel->setUser($user);
-                                                    $privateChannel->setServer($request->getDatabaseServer());
-                                                    $privateChannel->setInsertDate(new \DateTime());
-                                                    $this->getManager()->persist($privateChannel);
+                                UserHelper::getMember($request->getAuthor(), $request->getServer())
+                                    ->then(
+                                        function (Member $member) use ($channel, $perm) {
+                                            return $channel->setPermissions($member, $perm);
+                                        }
+                                    )
+                                    ->then(
+                                        function () use ($request, $matches, $channel, $user) {
+                                            $this->logger->info("Creating mentioned perms");
+                                            // Allow mentioned
+                                            $this->createMentionPerms($request, $channel)
+                                                ->then(
+                                                    function () use ($request, $user, $channel) {
+                                                        $request->reply("Channel created.");
+                                                        $privateChannel = new PrivateChannel();
+                                                        $privateChannel->setChannelId($channel->id);
+                                                        $privateChannel->setUser($user);
+                                                        $privateChannel->setServer($request->getDatabaseServer());
+                                                        $privateChannel->setInsertDate(new \DateTime());
+                                                        $this->getManager()->persist($privateChannel);
 
-                                                    $user->setPrivateChannel($privateChannel);
-                                                    $this->getManager()->flush($user);
-                                                }
-                                            );
-                                    }
-                                );
+                                                        $user->setPrivateChannel($privateChannel);
+                                                        $this->getManager()->flush($user);
+                                                    }
+                                                );
+                                        }
+                                    );
                             }
                         )->otherwise(
                             function ($error) use ($request, $channel) {
@@ -277,11 +281,15 @@ EOF
                 return $deferred->resolve($members);
             }
 
-            $perm      = $this->discord->factory(ChannelPermission::class, $perms);
-            $member    = UserHelper::getMember($mention, $request->getServer());
-            $members[] = $member;
-            $this->logger->info("Allowing: ".$member->username);
-            $channel->setPermissions($member, $perm)->then($setPerm, [$deferred, 'reject']);
+            $perm = $this->discord->factory(ChannelPermission::class, $perms);
+            UserHelper::getMember($mention, $request->getServer())
+                ->then(
+                    function (Member $member) use (&$members, $channel, $perm, $setPerm, $deferred) {
+                        $members[] = $member;
+                        $this->logger->info("Allowing: ".$member->username);
+                        $channel->setPermissions($member, $perm)->then($setPerm, [$deferred, 'reject']);
+                    }
+                );
         };
 
         $setPerm();
