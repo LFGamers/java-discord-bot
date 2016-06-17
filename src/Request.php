@@ -91,10 +91,8 @@ class Request extends BaseRequest
      */
     public function isAdmin()
     {
-        $member = UserHelper::getMember($this->getAuthor(), $this->getServer());
-
         return parent::isAdmin()
-        || $this->acl->userHasRole($member, 'Owners', $this->getServer())
-        || $this->acl->userHasRole($member, 'Community Adviser', $this->getServer());
+        || $this->acl->userHasRole($this->getGuildAuthor(), 'Owners', $this->getServer())
+        || $this->acl->userHasRole($this->getGuildAuthor(), 'Community Adviser', $this->getServer());
     }
 }

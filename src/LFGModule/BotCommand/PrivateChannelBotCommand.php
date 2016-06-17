@@ -217,12 +217,7 @@ EOF
                             function () use ($request, $matches, $channel, $user) {
                                 $this->logger->info("Creating author perm");
                                 $perm = $this->discord->factory(ChannelPermission::class, ['voice_connect' => true]);
-                                UserHelper::getMember($request->getAuthor(), $request->getServer())
-                                    ->then(
-                                        function (Member $member) use ($channel, $perm) {
-                                            return $channel->setPermissions($member, $perm);
-                                        }
-                                    )
+                                $channel->setPermissions($request->getGuildAuthor(), $perm)
                                     ->then(
                                         function () use ($request, $matches, $channel, $user) {
                                             $this->logger->info("Creating mentioned perms");

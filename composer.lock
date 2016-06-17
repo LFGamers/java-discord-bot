@@ -1806,12 +1806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "d028c30597de37031d20a48709796a103e86909a"
+                "reference": "c44a7d00e5323e2249f1766b55383c1a75ee70c6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/d028c30597de37031d20a48709796a103e86909a",
-                "reference": "d028c30597de37031d20a48709796a103e86909a",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/c44a7d00e5323e2249f1766b55383c1a75ee70c6",
+                "reference": "c44a7d00e5323e2249f1766b55383c1a75ee70c6",
                 "shasum": ""
             },
             "require": {
@@ -1849,7 +1849,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-06-15 05:12:35"
+            "time": "2016-06-17 08:11:37"
         },
         {
             "name": "monolog/monolog",
@@ -3312,12 +3312,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "1d034786b0ddd90bda12abe2dbcc7fa7701f62b4"
+                "reference": "506070bfd6052f8cf7af251b5c782933a68cf13c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/1d034786b0ddd90bda12abe2dbcc7fa7701f62b4",
-                "reference": "1d034786b0ddd90bda12abe2dbcc7fa7701f62b4",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/506070bfd6052f8cf7af251b5c782933a68cf13c",
+                "reference": "506070bfd6052f8cf7af251b5c782933a68cf13c",
                 "shasum": ""
             },
             "require": {
@@ -3367,7 +3367,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-06-16 05:36:45"
+            "time": "2016-06-17 08:13:48"
         },
         {
             "name": "twig/twig",
@@ -4020,16 +4020,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.5",
+            "version": "5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "744a50838ef373be00fb658ce9544905cf587c17"
+                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/744a50838ef373be00fb658ce9544905cf587c17",
-                "reference": "744a50838ef373be00fb658ce9544905cf587c17",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
+                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
                 "shasum": ""
             },
             "require": {
@@ -4094,7 +4094,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-15 07:20:05"
+            "time": "2016-06-16 06:01:15"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
