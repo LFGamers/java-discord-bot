@@ -37,11 +37,17 @@ $bot    = Bot::create(
         'parameters' => [
             'name'                 => 'LFG Bot',
             'version'              => '0.0.1',
-            'author'               => 'Looking FOr Gamers',
+            'author'               => 'Looking For Gamers',
             'log_dir'              => __DIR__.'/../var/logs/',
             'cache_dir'            => __DIR__.'/../var/cache/',
             'admin_id'             => $config['admin_id'],
             'token'                => $config['token'],
+            'error_channel_id'     => '194524667124383744',
+            'pastebin'             => [
+                'api_key' => '41e143251488ba4ea9c165951e879dbe',
+                'username'   => 'aequasi',
+                'password' => 'Funk$h03'
+            ],
             'prefix'               => '%',
             'status'               => [
                 'name' => 'https://lfgame.rs',
@@ -79,10 +85,10 @@ $bot    = Bot::create(
             ],
             'mappings' => [
                 'LFG' => [
-                    'type'      => 'annotation',
-                    'dir'       => realpath(__DIR__.'/../src/Model'),
-                    'prefix'    => 'LFGamers\Discord\Model',
-                    'alias'     => 'LFG',
+                    'type'   => 'annotation',
+                    'dir'    => realpath(__DIR__.'/../src/Model'),
+                    'prefix' => 'LFGamers\Discord\Model',
+                    'alias'  => 'LFG',
                 ],
             ],
         ],

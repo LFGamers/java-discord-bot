@@ -78,8 +78,13 @@ class AnnouncementsChecker
         $this->logger        = $logger;
         $this->serverManager = $serverManager;
 
-        $this->discord->loop->addPeriodicTimer(5, [$this, 'checkAnnouncements']);
+        $this->discord->loop->addPeriodicTimer(30, [$this, 'checkAnnouncements']);
         $this->checkAnnouncements();
+    }
+
+    private function debug(...$messages)
+    {
+        //call_user_func_array([$this->logger, 'debug'], $messages);
     }
 
     /**
@@ -98,7 +103,7 @@ class AnnouncementsChecker
             return;
         }
 
-        //$this->logger->info("Checking announcements: ".$this->serverManager->getClientServer()->name);
+        $this->debug("Checking announcements: ".$this->serverManager->getClientServer()->name);
 
         if ($dbServer->getAnnouncementsChannel() === null) {
             return;
@@ -124,9 +129,9 @@ class AnnouncementsChecker
                     if ($message === null) {
                         return $this->sendAnnouncement($dbServer, $server, $channel);
                     }
-                    /*$this->logger->debug(
+                    $this->debug(
                         'Last message was '.$message->timestamp->diffForHumans().' (Req '.$config['frequency'].'s)'
-                    );*/
+                    );
                     if ($message->timestamp->diffInSeconds() < (int) $config['frequency']) {
                         return;
                     }
@@ -136,27 +141,20 @@ class AnnouncementsChecker
                     )
                         ->then(
                             function (Collection $messages) use ($config, $dbServer, $server, $channel) {
-                                /*$this->logger->debug(
+                                $this->debug(
                                     $messages->count().' messages since last. (Req '.$config['minimum_messages'].')'
-                                );*/
+                                );
                                 if ($messages->count() >= $config['minimum_messages']) {
                                     $this->sendAnnouncement($dbServer, $server, $channel);
                                 }
-                            }
-                        )
-                        ->otherwise(
-                            function ($e) use ($dbServer, $server, $channel) {
-                                $this->logger->error($e);
-                                $this->sendAnnouncement($dbServer, $server, $channel);
                             }
                         );
                 }
             )
             ->otherwise(
                 function ($e) use ($dbServer, $server, $channel) {
-                    $this->logger->error('Error getting message');
-                    $this->logger->error($e);
-                    $this->sendAnnouncement($dbServer, $server, $channel);
+                    $this->logger->error('Error getting message', ['exception' => $e]);
+                    //$this->sendAnnouncement($dbServer, $server, $channel);
                 }
             );
     }

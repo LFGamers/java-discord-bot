@@ -36,7 +36,7 @@ class AnnouncementsBotCommand extends AbstractBotCommand
                 <<<EOF
 Use the following to manage announcements:
 
-`announcements toggle` to toggle announcements in the current server
+`announcements (toggle|start)` to toggle announcements in the current server
 `announcements channel [<#channel>]` to set the announcements channel, or get it
 `announcements list [--page=\d+]` to list all the announcements (paginated)
 `announcements view <\d+>` to view an announcement
@@ -60,7 +60,7 @@ EOF
         );
 
         $this->responds('/^ann(?:ouncements)? status$/i', [$this, 'getStatus']);
-        $this->responds('/^ann(?:ouncements)? toggle$/i', [$this, 'toggleAnnouncements']);
+        $this->responds('/^ann(?:ouncements)? (toggle|start)$/i', [$this, 'toggleAnnouncements']);
         $this->responds('/^ann(?:ouncements)? channel$/i', [$this, 'getAnnouncementsChannel']);
         $this->responds('/^ann(?:ouncements)? channel <#(?<channel>\d+)>$/i', [$this, 'setAnnouncementsChannel']);
         $this->responds('/^ann(?:ouncements)? config (?<option>[A-Za-z-_]+)$/i', [$this, 'getAnnouncementsConfig']);
