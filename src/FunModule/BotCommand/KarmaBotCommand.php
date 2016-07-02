@@ -91,7 +91,7 @@ EOF
         $this->responds('/^karma (top|best|bottom|worst)(?:\s+)?(\d+)?$/i', [$this, 'showKarma']);
         $this->responds('/^karma clear$/i', [$this, 'clearKarma']);
         $this->responds('/^karma <@!?(\d+)>$/i', [$this, 'getKarma']);
-        $this->responds('/^karma (give|remove) <@!?(\d+)>$/i', [$this, 'staffKarma']);
+        $this->responds('/^karma (give|add|remove|take) <@!?(\d+)>$/i', [$this, 'staffKarma']);
     }
 
     /**
@@ -107,12 +107,12 @@ EOF
             return $request->reply("This must be ran in a server.");
         }
 
-        if (!$this->isAllowed(UserHelper::getMember($request->getAuthor(), $request->getServer()), 'karma.staff')) {
+        if (!$this->isAllowed($request->getGuildAuthor(), 'karma.staff')) {
             return;
         }
 
         /** @var \Discord\Parts\User\User $clientUser */
-        $clientUser = $this->discord->client->users->get('id', $matches[2]);
+        $clientUser = $this->discord->users->get('id', $matches[2]);
         $user       = $this->getManager()->getRepository(User::class)->findOneByIdentifier($clientUser->id);
         if (empty($user)) {
             $user = new User();
@@ -124,11 +124,12 @@ EOF
             return $request->reply("... Nice try.");
         }
 
-        $phrase = $matches[1] === 'give'
+        $give   = $matches[1] === 'give' || $matches[1] === 'add';
+        $phrase = $give
             ? self::POSITIVE_MESSAGES[array_rand(self::POSITIVE_MESSAGES)]
             : self::NEGATIVE_MESSAGES[array_rand(self::NEGATIVE_MESSAGES)];
 
-        $karma = $matches[1] === 'give' ? 1 : -1;
+        $karma = $give ? 1 : -1;
         $user->setKarma($user->getKarma() + $karma);
         $this->getManager()->flush($user);
 
@@ -141,6 +142,7 @@ EOF
                 ]
             )
         );
+        $this->logger->debug("User has perms");
     }
 
     protected function giveUserKarma(Request $request, array $matches)
@@ -154,7 +156,7 @@ EOF
         }
 
         /** @var \Discord\Parts\User\User $clientUser */
-        $clientUser = $this->discord->client->users->get('id', $matches[1]);
+        $clientUser = $this->discord->users->get('id', $matches[1]);
         $user       = $this->getManager()->getRepository(User::class)->findOneByIdentifier($clientUser->id);
         if (empty($user)) {
             $user = new User();
@@ -165,7 +167,7 @@ EOF
         if ($request->getAuthor()->id === $clientUser->id) {
             return $request->reply("... Nice try.");
         }
-        
+
         /** @var User $author */
         $author = $this->getManager()->getRepository(User::class)->findOneByIdentifier($request->getAuthor()->id);
         if ($author->getKarma() < 1) {
@@ -225,7 +227,7 @@ EOF
         }
 
         /** @var \Discord\Parts\User\User $clientUser */
-        $clientUser = $this->discord->client->users->get('id', $matches[1]);
+        $clientUser = $this->discord->users->get('id', $matches[1]);
         $user       = $this->getManager()->getRepository(User::class)->findOneByIdentifier($clientUser->id);
         if (empty($user)) {
             $user = new User();
