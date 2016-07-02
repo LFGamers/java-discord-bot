@@ -1897,12 +1897,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "bfd63e37153ae83ef64eebf8bbd7d70fb945bf30"
+                "reference": "2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/bfd63e37153ae83ef64eebf8bbd7d70fb945bf30",
-                "reference": "bfd63e37153ae83ef64eebf8bbd7d70fb945bf30",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e",
+                "reference": "2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e",
                 "shasum": ""
             },
             "require": {
@@ -1941,7 +1941,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-07-02 09:27:35"
+            "time": "2016-07-02 09:37:01"
         },
         {
             "name": "monolog/monolog",
