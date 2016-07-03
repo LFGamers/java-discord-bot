@@ -1897,12 +1897,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e"
+                "reference": "5305b34eeac935f6310bf8dde801ff6b55e6a808"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e",
-                "reference": "2fb0a3e9104fbe18a53ae8a23ec35329e37a0a0e",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/5305b34eeac935f6310bf8dde801ff6b55e6a808",
+                "reference": "5305b34eeac935f6310bf8dde801ff6b55e6a808",
                 "shasum": ""
             },
             "require": {
@@ -1941,20 +1941,20 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-07-02 09:37:01"
+            "time": "2016-07-03 06:13:07"
         },
         {
             "name": "monolog/monolog",
-            "version": "1.19.0",
+            "version": "1.20.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
+                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
-                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/55841909e2bcde01b5318c35f2b74f8ecc86e037",
+                "reference": "55841909e2bcde01b5318c35f2b74f8ecc86e037",
                 "shasum": ""
             },
             "require": {
@@ -1973,8 +1973,8 @@
                 "php-console/php-console": "^3.1.3",
                 "phpunit/phpunit": "~4.5",
                 "phpunit/phpunit-mock-objects": "2.3.0",
-                "raven/raven": "^0.13",
                 "ruflin/elastica": ">=0.90 <3.0",
+                "sentry/sentry": "^0.13",
                 "swiftmailer/swiftmailer": "~5.3"
             },
             "suggest": {
@@ -1986,9 +1986,9 @@
                 "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
                 "php-amqplib/php-amqplib": "Allow sending log messages to an AMQP server using php-amqplib",
                 "php-console/php-console": "Allow sending log messages to Google Chrome",
-                "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
-                "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+                "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
+                "sentry/sentry": "Allow sending log messages to a Sentry server"
             },
             "type": "library",
             "extra": {
@@ -2019,7 +2019,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-12 18:29:35"
+            "time": "2016-07-02 14:02:10"
         },
         {
             "name": "nesbot/carbon",
@@ -3404,12 +3404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "e4592c5f923fe0fd703a07c94a9e8f5e74b05e93"
+                "reference": "5829425f52ab879bea3bf3b054d4d59ced2fec75"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/e4592c5f923fe0fd703a07c94a9e8f5e74b05e93",
-                "reference": "e4592c5f923fe0fd703a07c94a9e8f5e74b05e93",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/5829425f52ab879bea3bf3b054d4d59ced2fec75",
+                "reference": "5829425f52ab879bea3bf3b054d4d59ced2fec75",
                 "shasum": ""
             },
             "require": {
@@ -3460,7 +3460,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-07-02 05:13:52"
+            "time": "2016-07-03 00:02:50"
         },
         {
             "name": "twig/twig",
