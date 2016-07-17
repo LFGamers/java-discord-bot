@@ -14,8 +14,10 @@ namespace LFGamers\Discord;
 use Discord\Base\AbstractBotCommand as BaseAbstractBotCommand;
 use Discord\Parts\Guild\Role;
 use Discord\Parts\User\Member;
+use Discord\Parts\User\User as UserPart;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\ConfigHelper;
+use LFGamers\Discord\Model\User;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -81,5 +83,33 @@ abstract class AbstractBotCommand extends BaseAbstractBotCommand
         }
 
         throw new \Exception(sprintf("first argument must be an instance of %s or %s.", Member::class, Role::class));
+    }
+
+    /**
+     * @param string|int $identifier
+     *
+     * @return UserPart
+     */
+    protected function getClientUser($identifier) : UserPart
+    {
+        return $this->discord->users->get('id', $identifier);
+    }
+
+    /**
+     * @param string|int $identifier
+     *
+     * @return User
+     */
+    protected function getDatabaseUser($identifier) : User
+    {
+        $user = $this->getManager()->getRepository(User::class)->findOneByIdentifier($identifier);
+        if (empty($user)) {
+            $user = new User();
+            $user->setIdentifier($identifier);
+            $this->getManager()->persist($user);
+            $this->getManager()->flush($user);
+        }
+
+        return $user;
     }
 }

@@ -75,8 +75,15 @@ class BotReadyListener
         $this->grantPermission('Junior', 'moderation.kick');
         $this->grantPermission('Junior', 'moderation.mute');
 
+        // Strikes
+        $this->grantPermission('Staff', 'moderation.strike.view');
+        $this->grantPermission('Staff', 'moderation.strike.give');
+
         // Mod Log Perms
         $this->grantPermission('Staff', 'modlog.*');
+
+        // Fun Perms
+        $this->grantPermission('Staff', 'karma.staff');
     }
 
     /**

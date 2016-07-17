@@ -3404,12 +3404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "5829425f52ab879bea3bf3b054d4d59ced2fec75"
+                "reference": "92c46f4e7753ffc51cab739234f6c0fa6edaa572"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/5829425f52ab879bea3bf3b054d4d59ced2fec75",
-                "reference": "5829425f52ab879bea3bf3b054d4d59ced2fec75",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/92c46f4e7753ffc51cab739234f6c0fa6edaa572",
+                "reference": "92c46f4e7753ffc51cab739234f6c0fa6edaa572",
                 "shasum": ""
             },
             "require": {
@@ -3460,7 +3460,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-07-03 00:02:50"
+            "time": "2016-07-07 03:15:19"
         },
         {
             "name": "twig/twig",

@@ -13,6 +13,8 @@ namespace LFGamers\Discord\Helper;
 
 use Discord\Parts\Guild\Guild;
 use Discord\Parts\User\User;
+use React\Promise\FulfilledPromise;
+use React\Promise\Promise;
 use React\Promise\PromiseInterface;
 
 /**
@@ -26,9 +28,9 @@ abstract class UserHelper
      * @param User  $user
      * @param Guild $guild
      *
-     * @return PromiseInterface
+     * @return Promise|PromiseInterface|FulfilledPromise
      */
-    public static function getMember(User $user, Guild $guild) : PromiseInterface
+    public static function getMember(User $user, Guild $guild)
     {
         return $guild->members->fetch($user->id);
     }

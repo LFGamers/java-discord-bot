@@ -13,6 +13,7 @@ namespace LFGamers\Discord\ModerationModule\BotCommand;
 
 use Discord\Base\Request;
 use LFGamers\Discord\AbstractBotCommand;
+use LFGamers\Discord\Helper\ConfigHelper;
 use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\User;
 use LFGamers\Discord\Model\UserLog;
@@ -55,15 +56,23 @@ EOF
             }
         );
 
+        $this->responds('/^log channel(\s+)?<\#(?<channel>\d+)>$/i', [$this, 'setChannel']);
         $this->responds('/^log status(\s+)?<@!?(\d+)>(\s+)?$/i', [$this, 'getStatus']);
         $this->responds('/^log warning(\s+)?<@!?(\d+)>(\s+)?(?P<message>.*)$/i', [$this, 'logWarning']);
         $this->responds('/^log strike(\s+)?<@!?(\d+)>(\s+)?(?P<message>.*)$/i', [$this, 'logStrike']);
         $this->responds('/^log note(\s+)?<@!?(\d+)>(\s+)?(?P<message>.*)$/i', [$this, 'logNote']);
     }
 
+    protected function setChannel(Request $request, array $matches)
+    {
+        $this->config->set('modlog_channel.'.$request->getServer()->id, $matches['channel']);
+
+        $request->reply(':thumbsup::skin-tone-2:');
+    }
+
     protected function getStatus(Request $request, array $matches)
     {
-        if (!$this->isAllowed(UserHelper::getMember($request->getAuthor(), $request->getServer()), 'modlog.view')) {
+        if (!$this->isAllowed($request->getGuildAuthor(), 'modlog.view')) {
             return;
         }
 
@@ -115,7 +124,7 @@ EOF
 
     protected function logSomething(Request $request, array $matches, $category)
     {
-        if (!$this->isAllowed(UserHelper::getMember($request->getAuthor(), $request->getServer()), 'modlog.log')) {
+        if (!$this->isAllowed($request->getGuildAuthor(), 'modlog.log')) {
             return;
         }
 

@@ -8,6 +8,12 @@
 
             <tag name="kernel.event_listener" event="ready_finish" method="onBotReady"/>
         </service>
+        <service id="listener.mod_log" class="LFGamers\Discord\BaseModule\Listener\ModLogListener">
+            <argument type="service" id="discord"/>
+            <argument type="service" id="helper.config"/>
+
+            <tag name="kernel.event_listener" event="moderation_action" method="onBotEvent"/>
+        </service>
         <service id="listener.private_channel" class="LFGamers\Discord\BaseModule\Listener\PrivateChannelListener">
             <argument type="service" id="discord"/>
             <argument type="service" id="default_manager"/>
@@ -23,5 +29,12 @@
 
             <tag name="kernel.event_listener" event="manager.server.loaded" method="onServerManagerReady"/>
         </service>
+        <!--service id="listener.punishments" class="LFGamers\Discord\BaseModule\Listener\PunishmentListener">
+            <argument type="service" id="discord"/>
+            <argument type="service" id="default_manager"/>
+            <argument type="service" id="monolog.logger.bot"/>
+
+            <tag name="kernel.event_listener" event="ready_finish" method="onBotReady"/>
+        </service-->
     </services>
 </container>
