@@ -84,6 +84,7 @@ class BotReadyListener
 
         // Fun Perms
         $this->grantPermission('Staff', 'karma.staff');
+        $this->grantPermission('Staff', 'tag.set');
     }
 
     /**

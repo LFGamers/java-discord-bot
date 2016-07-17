@@ -106,6 +106,10 @@ EOF
      */
     protected function setTag(Request $request, array $matches)
     {
+        if (!$this->isAllowed($request->getGuildAuthor(), 'tag.set')) {
+            return;
+        }
+
         /** @var Tag $tag */
         $repo = $this->getManager()->getRepository(Tag::class);
         $tag  = $repo->findOneByName($matches['name']);
