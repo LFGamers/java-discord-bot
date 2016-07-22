@@ -104,7 +104,24 @@ abstract class RoleHelper
     {
         $role = $server->roles->get('name', $name);
         if (empty($role)) {
-            throw new \Exception("Role not found: " . $name);
+            throw new \Exception("Role not found: ".$name);
+        }
+
+        return $role;
+    }
+
+    /**
+     * @param string $id
+     * @param Guild  $server
+     *
+     * @return Role
+     * @throws \Exception
+     */
+    public static function getRoleById($id, Guild $server) : Role
+    {
+        $role = $server->roles->get('id', $id);
+        if (empty($role)) {
+            throw new \Exception("Role not found: ".$id);
         }
 
         return $role;
@@ -222,6 +239,10 @@ abstract class RoleHelper
         }
 
         if (!($role instanceof Role)) {
+            if (is_int($role)) {
+                return !empty($user->roles->get('id', $role));
+            }
+
             $role = static::getRoleByName($role, $server === null ? $user->guild : $server);
         }
 

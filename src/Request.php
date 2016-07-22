@@ -91,8 +91,20 @@ class Request extends BaseRequest
      */
     public function isAdmin()
     {
-        return parent::isAdmin()
-        || $this->acl->userHasRole($this->getGuildAuthor(), 'Owners', $this->getServer())
-        || $this->acl->userHasRole($this->getGuildAuthor(), 'Community Adviser', $this->getServer());
+        if (parent::isAdmin()) {
+            return true;
+        }
+
+        // Owner
+        if ($this->acl->userHasRole($this->getGuildAuthor(), 206020688098754562, $this->getServer())) {
+            return true;
+        }
+
+        // Community Adviser
+        if ($this->acl->userHasRole($this->getGuildAuthor(), 206021042454396929, $this->getServer())) {
+            return true;
+        }
+
+        return false;
     }
 }
