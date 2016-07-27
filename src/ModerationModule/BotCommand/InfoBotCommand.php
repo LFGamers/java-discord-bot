@@ -64,9 +64,9 @@ EOF
     public function setHandlers()
     {
         $this->responds('/^info$/', [$this, 'getServerInfo']);
-        $this->responds('/^info <#(?<channel>\d+)>$/', [$this, 'getChannelInfo']);
-        $this->responds('/^info <@!?(?<user>\d+)>$/', [$this, 'getUserInfo']);
-        $this->responds('/^info (?<name>.*)$/', [$this, 'getUserInfoByName']);
+        $this->responds('/^info\s+<#(?<channel>\d+)>$/', [$this, 'getChannelInfo']);
+        $this->responds('/^info\s+<@!?(?<user>\d+)>$/', [$this, 'getUserInfo']);
+        $this->responds('/^info\s+(?<name>.*)$/', [$this, 'getUserInfoByName']);
     }
 
     protected function getUserInfoByName(Request $request, array $matches)
