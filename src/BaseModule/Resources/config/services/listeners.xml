@@ -29,12 +29,12 @@
 
             <tag name="kernel.event_listener" event="manager.server.loaded" method="onServerManagerReady"/>
         </service>
-        <!--service id="listener.punishments" class="LFGamers\Discord\BaseModule\Listener\PunishmentListener">
+        <service id="listener.punishments" class="LFGamers\Discord\BaseModule\Listener\PunishmentListener">
             <argument type="service" id="discord"/>
             <argument type="service" id="default_manager"/>
             <argument type="service" id="monolog.logger.bot"/>
 
             <tag name="kernel.event_listener" event="ready_finish" method="onBotReady"/>
-        </service-->
+        </service>
     </services>
 </container>

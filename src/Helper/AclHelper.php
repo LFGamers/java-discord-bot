@@ -154,7 +154,7 @@ class AclHelper
      * @param string $permission
      * @param bool   $allowed
      */
-    public function grantPermission(Role $role, string $permission, $allowed = true)
+    public function ensurePermission(Role $role, string $permission, $allowed = true)
     {
         $dbRole = $this->entityManager->getRepository(DbRole::class)->findOneByIdentifier($role->id);
         if (empty($dbRole)) {

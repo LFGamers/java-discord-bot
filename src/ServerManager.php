@@ -12,11 +12,13 @@
 namespace LFGamers\Discord;
 
 use Discord\Base\AppBundle\Manager\ServerManager as BaseServerManager;
+use Discord\Base\Request;
 use Discord\Discord;
 use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Channel;
 use Discord\Parts\Channel\Message;
 use Discord\Parts\User\Member;
+use Discord\Parts\WebSockets\PresenceUpdate;
 use LFGamers\Discord\Model\Announcement;
 use LFGamers\Discord\Model\Config;
 use LFGamers\Discord\Model\Server;
@@ -70,31 +72,70 @@ class ServerManager extends BaseServerManager
         );
     }
 
-    public function onMemberUpdate(Member $member, Discord $discord)
+    /**
+     * @param PresenceUpdate $presenceUpdate
+     * @param PresenceUpdate $old
+     */
+    public function onPresenceUpdate(PresenceUpdate $presenceUpdate, PresenceUpdate $old)
     {
-        /** @var Member $oldUser */
-        $oldUser = $discord->guilds->get('id', $this->clientServer->id)->members->get('id', $member->id);
+        if ($presenceUpdate->status === 'offline' && $presenceUpdate->status !== $old->status) {
+            /** @var User $user */
+            $user = $this->getRepository(User::class)->findOneBy(['identifier' => $presenceUpdate->user->id]);
+            $user->setLastSeen(new \DateTime());
+        }
+    }
 
+    /**
+     * @param Request $request
+     */
+    protected function onMessage(Request $request)
+    {
+        $user = $this->getRepository(User::class)->findOneBy(['identifier' => $request->getAuthor()->id]);
+        $user->setLastSeen(new \DateTime());
+        $user->setLastSpoke(new \DateTime());
+
+        parent::onMessage($request);
+    }
+
+    public function onMemberUpdate(Member $member, Member $oldUser)
+    {
         $type = null;
+        var_dump([$member->username, $oldUser->username, $member->nick, $oldUser->nick]);
         if ($member->username !== $oldUser->username) {
             $type = 'name';
+
+            /** @var User $user */
+            $user = $this->getRepository(User::class)->findOneBy(['identifier' => $member->id]);
+            $user->addName($member->username);
         }
         if ($member->nick !== $oldUser->nick) {
-            $type = 'name';
+            $type = 'nick';
         }
 
         if ($type === null) {
             return;
         }
 
+        var_dump($type, $member->nick, $member->username);
+        if ($type === 'nick' && $member->nick === null) {
+            return $this->logEvent(
+                sprintf(
+                    ':warning: **%s#%d** (%d) has reset their nick :warning:',
+                    $oldUser->username,
+                    $member->discriminator,
+                    $member->id
+                )
+            );
+        }
+
         $this->logEvent(
             sprintf(
-                ':warning: **%s#%d** (%d) has changed their %s to `%s` :x:',
+                ':warning: **%s#%d** (%d) has changed their %s to `%s` :warning:',
                 $oldUser->username,
                 $member->discriminator,
                 $member->id,
                 $type,
-                $member->username
+                $member->{$type}
             )
         );
     }
@@ -130,10 +171,6 @@ class ServerManager extends BaseServerManager
      */
     private function logEvent(string $message)
     {
-        if (!$this->container->getParameter('features')['event_log']['enabled']) {
-            return;
-        }
-
         /** @var Channel $channel */
         $channel = $this->clientServer->channels->get('name', 'event-log');
         if (empty($channel)) {

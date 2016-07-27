@@ -65,17 +65,8 @@ abstract class AbstractPunishment
      */
     protected function getMember(Strike $strike, callable $callback = null, callable $errorCallback = null)
     {
-        $promise = UserHelper::getMember($this->getUser($strike), $this->getGuild($strike));
-
-        if ($callback !== null) {
-            $promise->then($promise);
-        }
-
-        if ($errorCallback !== null) {
-            $promise->otherwise($errorCallback);
-        }
-
-        return $promise;
+        return UserHelper::getMember($this->getUser($strike), $this->getGuild($strike))
+            ->then($callback, $errorCallback);
     }
 
     /**
@@ -95,6 +86,6 @@ abstract class AbstractPunishment
      */
     protected function getGuild(Strike $strike) : Guild
     {
-        return $this->discord->guild->get('id', $strike->getGuild()->getIdentifier());
+        return $this->discord->guilds->get('id', $strike->getServer()->getIdentifier());
     }
 }

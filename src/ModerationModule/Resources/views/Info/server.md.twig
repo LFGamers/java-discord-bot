@@ -1,0 +1,11 @@
+```xl
+​ Server: {{ server.name }}
+     ID: {{ server.id }}
+ Region: {{ server.region }}
+Members: {{ server.member_count }}
+  Chats: {{ textChannels|length }} Text / {{ voiceChannels|length }} Voice
+  Owner: {{ owner.username }}#{{ owner.discriminator }}
+Created: {{ created.diffForHumans() }} ({{ created.format('Y-m-d H:i:s') }})
+   Icon: {{ server.getIconAttribute()|default('No Icon') }}
+  Roles: {{ roles|join(', ') }}
+```

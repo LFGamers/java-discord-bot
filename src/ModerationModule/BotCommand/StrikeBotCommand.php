@@ -15,6 +15,7 @@ use Discord\Base\AppBundle\Event\ServerEvent;
 use Discord\Base\Request;
 use Discord\Parts\Guild\Role;
 use Discord\Parts\User\Member;
+use Doctrine\ORM\ORMException;
 use LFGamers\Discord\AbstractBotCommand;
 use LFGamers\Discord\Helper\RoleHelper;
 use LFGamers\Discord\Helper\UserHelper;
@@ -25,6 +26,7 @@ use LFGamers\Discord\ModerationModule\Punishment\AbstractPunishment;
 use LFGamers\Discord\ModerationModule\Punishment\Mute;
 use LFGamers\Discord\ModerationModule\Punishment\PermanentBan;
 use LFGamers\Discord\ModerationModule\Punishment\TemporaryBan;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -39,7 +41,6 @@ class StrikeBotCommand extends AbstractBotCommand
     public function configure()
     {
         $this
-            ->setEnabled(false)
             ->setName('strike')
             ->setDescription('Manages strikes for users.')
             ->setHelp(
@@ -47,7 +48,6 @@ class StrikeBotCommand extends AbstractBotCommand
 Use the following to moderate:
 
 `strike @user <Reason>` to give a user a strike
-`destrike @user <offense>` to remove the given strike from a user
 `strikes @user` to get the strike history of a user
 EOF
             );
@@ -65,18 +65,28 @@ EOF
             }
         );
 
+        $this->responds('/^strike(?:\s+)<@!?(?<user>\d+)>(?:\s+)?$/', [$this, 'requireReason']);
         $this->responds('/^strike(?:\s+)<@!?(?<user>\d+)>(?:\s+)?(?<reason>.*)?$/i', [$this, 'giveStrike']);
         //$this->responds('/^destrike(?:\s+)<@!?(?<user>\d+)> (\d+)/i', [$this, 'destrike']);
         $this->responds('/^strikes(?:\s+)?<@!?(?<user>\d+)>/i', [$this, 'viewStrikes']);
     }
 
+    protected function requireReason(Request $request)
+    {
+        return $request->reply("You must specify a reason.");
+    }
+
     protected function giveStrike(Request $request, array $matches)
     {
         if ($request->isPrivateMessage()) {
+            $this->logger->info("<@{$request->getAuthor()->id}> tried to punish in PM.");
+
             return;
         }
 
         if (!$this->isAllowed($request->getGuildAuthor(), 'moderation.strike.give')) {
+            $this->logger->info("<@{$request->getAuthor()->id}> tried to give someone a strike.");
+
             return;
         }
 
@@ -87,16 +97,12 @@ EOF
         UserHelper::getMember($this->getClientUser($matches['user']), $request->getServer())
             ->then(
                 function (Member $member) use ($request, $matches) {
-                    $roles     = RoleHelper::getUserRoles($member);
-                    $staffRole = RoleHelper::getRoleByName('Staff', $member->guild);
-                    $botRole   = RoleHelper::getRoleByName('Bot', $member->guild);
-                    $staff     = $roles->find(
-                        function (Role $role) use ($staffRole, $botRole) {
-                            return $role->id === $staffRole->id || $role->id === $botRole->id;
+                    try {
+                        if (RoleHelper::userHasRole($member, 'Staff') || RoleHelper::userHasRole($member, 'Bot')) {
+                            return $request->reply(":thumbsdown::skin-tone-2: Can't punish staff.");
                         }
-                    );
-                    if (!empty($staff)) {
-                        return $request->reply(":thumbsdown::skin-tone-2: Can't punish staff.");
+                    } catch (\Exception $e) {
+                        return $request->reply(":thumbsdown::skin-tone-2: This server is not set up for strikes.");
                     }
 
                     $user           = $this->getDatabaseUser($matches['user']);
@@ -104,9 +110,8 @@ EOF
                     $punishmentType = $this->getPunishment($strikes);
 
                     /** @var AbstractPunishment $punishment */
-                    $punishment = new $punishmentType['action']();
-                    $punishment->performPunishment($member);
-                    
+                    $punishment = new $punishmentType['action']($this->getDiscord());
+
                     $strike = new Strike();
                     $strike->setInsertDate(new \DateTime());
                     $strike->setModerator($this->getDatabaseUser($request->getAuthor()->id));
@@ -115,15 +120,44 @@ EOF
                     $strike->setServer($request->getDatabaseServer());
 
                     $strike->setAction($punishmentType['action']);
-                    $strike->setDuration($punishmentType['duration'] ?: null);
+                    if (isset($punishmentType['duration'])) {
+                        $strike->setDuration($punishmentType['duration']);
+                    }
 
-                    $this->getManager()->persist($strike);
-                    $this->getManager()->flush();
+                    $punishment->perform($strike)
+                        ->then(
+                            function () use ($strike, $request, $member) {
+                                $this->getManager()->persist($strike);
+                                try {
+                                    $this->getManager()->flush();
+                                } catch (ORMException $e) {
+                                    $this->getManager()->getConnection()->connect();
+                                    $this->getManager()->flush();
+                                }
 
-                    $request->reply(':thumbsup::skin-tone-2:');
+                                $request->reply(':thumbsup::skin-tone-2:');
 
-                    $event = ServerEvent::create($request->getServer(), 'moderation_action', $strike, $member);
-                    $this->container->get('dispatcher')->dispatch($event);
+                                $event = ServerEvent::create(
+                                    $request->getServer(),
+                                    'moderation_action',
+                                    $strike,
+                                    $member
+                                );
+                                $this->container->get('event_dispatcher')->dispatch($event);
+                            }
+                        )
+                        ->otherwise(
+                            function (\Exception $e) use ($request) {
+                                $this->logger->error($e->getMessage());
+                                return $request->reply(
+                                    ":thumbsdown::skin-tone-2: This server is not set up for strikes."
+                                );
+                            }
+                        );
+                },
+                function ($error) use ($request) {
+                    $this->logger->error($error->getMessage());
+                    $request->reply(":thumbsdown::skin-tone-2: Failed to punish user.");
                 }
             )
             ->otherwise(

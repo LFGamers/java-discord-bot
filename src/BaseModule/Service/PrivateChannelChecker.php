@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Discord\Discord;
 use Discord\Parts\Channel\Channel;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\ORMException;
 use LFGamers\Discord\Model\PrivateChannel;
 use LFGamers\Discord\ServerManager;
 use Monolog\Logger;
@@ -110,6 +111,11 @@ class PrivateChannelChecker
             $this->manager->remove($privateChannel);
         }
 
-        $this->manager->flush();
+        try {
+            $this->manager->flush();
+        } catch (ORMException $e) {
+            $this->manager->getConnection()->connect();
+            $this->manager->flush();
+        }
     }
 }

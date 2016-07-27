@@ -14,6 +14,7 @@ namespace LFGamers\Discord\BaseModule\Listener;
 use Discord\Base\AppBundle\Event\BotEvent;
 use Discord\Discord;
 use Discord\Parts\Guild\Guild;
+use Discord\Parts\Guild\Role;
 use LFGamers\Discord\Helper\AclHelper;
 use LFGamers\Discord\Helper\RoleHelper;
 
@@ -30,9 +31,9 @@ class BotReadyListener
     private $acl;
 
     /**
-     * @var Guild
+     * @var Discord
      */
-    protected $server;
+    private $discord;
 
     /**
      * BotReadyListener constructor.
@@ -43,8 +44,7 @@ class BotReadyListener
     public function __construct(AclHelper $acl, Discord $discord)
     {
         $this->acl = $acl;
-
-        $this->server = $discord->guilds->get('id', 108439985920704512);
+        $this->discord = $discord;
     }
 
     /**
@@ -52,11 +52,9 @@ class BotReadyListener
      */
     public function onBotReady(BotEvent $event)
     {
-        $this->wipePermissions();
-        
         // Global Perms
-        $this->grantPermission('Owners', '*');
-        $this->grantPermission('Community Adviser', '*');
+        $this->ensurePermission('Owners', '*');
+        $this->ensurePermission('Community Adviser', '*');
 
         /*
          * Moderator Perms
@@ -69,22 +67,22 @@ class BotReadyListener
          * Purge:     moderation.purge
          */
 
-        $this->grantPermission('Community Moderator', 'moderation.*');
-        $this->grantPermission('Chief', 'moderation.*');
-        $this->grantPermission('Senior', 'moderation.*');
-        $this->grantPermission('Junior', 'moderation.kick');
-        $this->grantPermission('Junior', 'moderation.mute');
+        $this->ensurePermission('Community Moderator', 'moderation.*');
+        $this->ensurePermission('Chief', 'moderation.*');
+        $this->ensurePermission('Senior', 'moderation.*');
+        $this->ensurePermission('Junior', 'moderation.kick');
+        $this->ensurePermission('Junior', 'moderation.mute');
 
         // Strikes
-        $this->grantPermission('Staff', 'moderation.strike.view');
-        $this->grantPermission('Staff', 'moderation.strike.give');
+        $this->ensurePermission('Staff', 'moderation.strike.view');
+        $this->ensurePermission('Staff', 'moderation.strike.give');
 
         // Mod Log Perms
-        $this->grantPermission('Staff', 'modlog.*');
+        $this->ensurePermission('Staff', 'modlog.*');
 
         // Fun Perms
-        $this->grantPermission('Staff', 'karma.staff');
-        $this->grantPermission('Staff', 'tag.set');
+        $this->ensurePermission('Staff', 'karma.staff');
+        $this->ensurePermission('Staff', 'tag.set');
     }
 
     /**
@@ -92,24 +90,21 @@ class BotReadyListener
      * @param string $permission
      * @param bool   $allowed
      */
-    protected function grantPermission(string $role, string $permission, $allowed = true)
+    protected function ensurePermission(string $role, string $permission, $allowed = true)
     {
-        $this->acl->grantPermission($this->getRole($role), $permission, $allowed);
+        foreach ($this->discord->guilds as $server) {
+            $this->acl->ensurePermission($this->getRole($server, $role), $permission, $allowed);
+        }
     }
 
     /**
+     * @param Guild  $guild
      * @param string $name
      *
      * @return \Discord\Parts\Guild\Role
-     * @throws \Exception
      */
-    protected function getRole(string $name)
+    protected function getRole(Guild $guild, string $name) : Role
     {
-        return RoleHelper::getRoleByName($name, $this->server);
-    }
-
-    private function wipePermissions()
-    {
-        $this->acl->wipeServerPermissions($this->server);
+        return RoleHelper::getRoleByName($name, $guild);
     }
 }

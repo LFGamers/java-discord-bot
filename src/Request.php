@@ -17,7 +17,6 @@ use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use LFGamers\Discord\Exception\MemberNotFoundException;
 use LFGamers\Discord\Helper\AclHelper;
-use LFGamers\Discord\Helper\UserHelper;
 use Monolog\Logger;
 use React\EventLoop\LoopInterface;
 use Twig_Environment;

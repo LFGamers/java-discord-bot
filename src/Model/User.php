@@ -59,6 +59,34 @@ class User
     protected $karma = 0;
 
     /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $lastSeen;
+
+    /**
+     * @var \DateTime
+     * @ORM\Column(type="datetime")
+     */
+    protected $lastSpoke;
+
+    /**
+     * @var array
+     * @ORM\Column(type="json_array")
+     */
+    protected $names;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->names     = [];
+        $this->lastSeen  = new \DateTime();
+        $this->lastSpoke = new \DateTime();
+    }
+
+    /**
      * @return int
      */
     public function getId() : int
@@ -154,6 +182,73 @@ class User
     public function setKarma(int $karma) : User
     {
         $this->karma = $karma;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastSeen() : \DateTime
+    {
+        return $this->lastSeen;
+    }
+
+    /**
+     * @param \DateTime $lastSeen
+     *
+     * @return User
+     */
+    public function setLastSeen(\DateTime $lastSeen) : User
+    {
+        $this->lastSeen = $lastSeen;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastSpoke() : \DateTime
+    {
+        return $this->lastSpoke;
+    }
+
+    /**
+     * @param \DateTime $lastSpoke
+     *
+     * @return User
+     */
+    public function setLastSpoke(\DateTime $lastSpoke) : User
+    {
+        $this->lastSpoke = $lastSpoke;
+
+        return $this;
+    }
+
+    public function addName($name) : User
+    {
+        $this->names[] = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNames() : array
+    {
+        return $this->names;
+    }
+
+    /**
+     * @param array $names
+     *
+     * @return User
+     */
+    public function setNames(array $names) : User
+    {
+        $this->names = $names;
 
         return $this;
     }

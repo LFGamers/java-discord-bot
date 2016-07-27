@@ -218,7 +218,7 @@ class Strike
      *
      * @return Strike
      */
-    public function setDuration(int $duration) : Strike
+    public function setDuration(int $duration = null) : Strike
     {
         $this->duration = $duration;
 

@@ -86,6 +86,8 @@ class PunishmentChecker
 
         $strikes = $this->getStrikes();
         foreach ($strikes as $strike) {
+            $this->manager->refresh($strike);
+
             $dt = Carbon::instance($strike->getInsertDate());
             if ($strike->getDuration() > 0 && $dt->diffInSeconds() > $strike->getDuration()) {
                 $this->unpunish($strike)
@@ -113,7 +115,7 @@ class PunishmentChecker
     {
         $cls = $strike->getAction();
         /** @var AbstractPunishment $punishment */
-        $punishment = new $cls;
+        $punishment = new $cls($this->discord);
 
         return $punishment->resolve($strike);
     }

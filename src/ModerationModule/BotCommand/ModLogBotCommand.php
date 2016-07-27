@@ -39,7 +39,8 @@ Use the following to moderate:
 `log note @user description` to log a note about a user
 `log warning @user description` to log that a warning was given to a user
 `log strike @user description` to log that a strike was given to a user
-`log status @user` too list all logs for a user
+`log status @user` to list all logs for a user
+`log channel #channel` to set the channel to log things to 
 EOF
             );
     }

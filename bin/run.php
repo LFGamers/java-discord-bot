@@ -42,10 +42,11 @@ $bot    = Bot::create(
             'cache_dir'            => __DIR__.'/../var/cache/',
             'admin_id'             => $config['admin_id'],
             'token'                => $config['token'],
+            'log_messages'         => true,
             'error_channel_id'     => '194524667124383744',
             'pastebin'             => [
-                'api_key' => '41e143251488ba4ea9c165951e879dbe',
-                'username'   => 'aequasi',
+                'api_key'  => '41e143251488ba4ea9c165951e879dbe',
+                'username' => 'aequasi',
                 'password' => 'Funk$h03'
             ],
             'prefix'               => '%',

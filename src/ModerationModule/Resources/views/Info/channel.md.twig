@@ -1,0 +1,6 @@
+```xl
+​Channel: {{ channel.name }}
+   Type: {{ channel.type == 0 ? 'Text' : 'Voice' }}
+     ID: {{ channel.id }}
+Created: {{ created.diffForHumans() }} ({{ created.format('Y-m-d H:i:s') }})
+```

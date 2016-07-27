@@ -140,16 +140,16 @@
         },
         {
             "name": "cache/adapter-bundle",
-            "version": "0.3.3",
+            "version": "0.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-cache/adapter-bundle.git",
-                "reference": "4aed6ab3a518f3c9bca1907efa159b89d7e93140"
+                "reference": "cfe251461ec3d1bb65d10f92a193a6ab967ba5dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-cache/adapter-bundle/zipball/4aed6ab3a518f3c9bca1907efa159b89d7e93140",
-                "reference": "4aed6ab3a518f3c9bca1907efa159b89d7e93140",
+                "url": "https://api.github.com/repos/php-cache/adapter-bundle/zipball/cfe251461ec3d1bb65d10f92a193a6ab967ba5dc",
+                "reference": "cfe251461ec3d1bb65d10f92a193a6ab967ba5dc",
                 "shasum": ""
             },
             "require": {
@@ -191,7 +191,7 @@
             ],
             "description": "A bundle that registers cache implementations as Symfony services supporting PSR-6 and tagging",
             "homepage": "https://github.com/php-cache/adapter-bundle",
-            "time": "2016-03-01 23:43:05"
+            "time": "2016-07-21 14:47:21"
         },
         {
             "name": "cache/adapter-common",
@@ -1478,16 +1478,16 @@
         },
         {
             "name": "gebn/brush",
-            "version": "v1.0.0",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/gebn/Brush.git",
-                "reference": "8159b7eeb54e20aabe97fd246b5a77d7ec027db6"
+                "reference": "809c0fdf66c1d83816e001d8719ec85ee7817346"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/gebn/Brush/zipball/8159b7eeb54e20aabe97fd246b5a77d7ec027db6",
-                "reference": "8159b7eeb54e20aabe97fd246b5a77d7ec027db6",
+                "url": "https://api.github.com/repos/gebn/Brush/zipball/809c0fdf66c1d83816e001d8719ec85ee7817346",
+                "reference": "809c0fdf66c1d83816e001d8719ec85ee7817346",
                 "shasum": ""
             },
             "require": {
@@ -1519,31 +1519,31 @@
                 "text",
                 "wrapper"
             ],
-            "time": "2016-02-25 00:13:53"
+            "time": "2016-07-12 10:44:22"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.2.0",
+            "version": "6.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "d094e337976dff9d8e2424e8485872194e768662"
+                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/d094e337976dff9d8e2424e8485872194e768662",
-                "reference": "d094e337976dff9d8e2424e8485872194e768662",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/3f808fba627f2c5b69e2501217bf31af349c1427",
+                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427",
                 "shasum": ""
             },
             "require": {
-                "guzzlehttp/promises": "~1.0",
-                "guzzlehttp/psr7": "~1.1",
-                "php": ">=5.5.0"
+                "guzzlehttp/promises": "^1.0",
+                "guzzlehttp/psr7": "^1.3.1",
+                "php": ">=5.5"
             },
             "require-dev": {
                 "ext-curl": "*",
-                "phpunit/phpunit": "~4.0",
-                "psr/log": "~1.0"
+                "phpunit/phpunit": "^4.0",
+                "psr/log": "^1.0"
             },
             "type": "library",
             "extra": {
@@ -1581,7 +1581,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-03-21 20:02:09"
+            "time": "2016-07-15 17:22:37"
         },
         {
             "name": "guzzlehttp/promises",
@@ -1897,12 +1897,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "5305b34eeac935f6310bf8dde801ff6b55e6a808"
+                "reference": "afe836a3551830210d0d98a6202db902a3c691b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/5305b34eeac935f6310bf8dde801ff6b55e6a808",
-                "reference": "5305b34eeac935f6310bf8dde801ff6b55e6a808",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/afe836a3551830210d0d98a6202db902a3c691b3",
+                "reference": "afe836a3551830210d0d98a6202db902a3c691b3",
                 "shasum": ""
             },
             "require": {
@@ -1917,7 +1917,7 @@
                 "sensio/distribution-bundle": "^5.0",
                 "symfony/monolog-bundle": "^2.4|^3.0",
                 "symfony/symfony": "^2.8|^3.0",
-                "team-reflex/discord-php": "v4.x-dev"
+                "team-reflex/discord-php": "dev-develop"
             },
             "require-dev": {
                 "doctrine/mongodb-odm": "^1.0",
@@ -1941,7 +1941,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-07-03 06:13:07"
+            "time": "2016-07-27 19:43:44"
         },
         {
             "name": "monolog/monolog",
@@ -3400,16 +3400,16 @@
         },
         {
             "name": "team-reflex/discord-php",
-            "version": "v4.x-dev",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "92c46f4e7753ffc51cab739234f6c0fa6edaa572"
+                "reference": "ab23a0ffcaafc56ae4d0a00af87d402884796ad0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/92c46f4e7753ffc51cab739234f6c0fa6edaa572",
-                "reference": "92c46f4e7753ffc51cab739234f6c0fa6edaa572",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/ab23a0ffcaafc56ae4d0a00af87d402884796ad0",
+                "reference": "ab23a0ffcaafc56ae4d0a00af87d402884796ad0",
                 "shasum": ""
             },
             "require": {
@@ -3441,6 +3441,9 @@
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "src/Discord/functions.php"
+                ],
                 "psr-4": {
                     "Discord\\": "src/Discord"
                 }
@@ -3460,7 +3463,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-07-07 03:15:19"
+            "time": "2016-07-27 19:02:34"
         },
         {
             "name": "twig/twig",
@@ -3869,16 +3872,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "4.0.0",
+            "version": "4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "900370c81280cc0d942ffbc5912d80464eaee7e9"
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/900370c81280cc0d942ffbc5912d80464eaee7e9",
-                "reference": "900370c81280cc0d942ffbc5912d80464eaee7e9",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/5f3f7e736d6319d5f1fc402aff8b026da26709a3",
+                "reference": "5f3f7e736d6319d5f1fc402aff8b026da26709a3",
                 "shasum": ""
             },
             "require": {
@@ -3887,7 +3890,7 @@
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-token-stream": "^1.4.2",
                 "sebastian/code-unit-reverse-lookup": "~1.0",
-                "sebastian/environment": "^1.3.2",
+                "sebastian/environment": "^1.3.2 || ^2.0",
                 "sebastian/version": "~1.0|~2.0"
             },
             "require-dev": {
@@ -3928,7 +3931,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-03 05:03:56"
+            "time": "2016-07-26 14:39:29"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -4113,16 +4116,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.6",
+            "version": "5.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59"
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
-                "reference": "2f1fc94b77ea6418bd6a06c64a1dac0645fbce59",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3132365e1430c091f208e120b8845d39c25f20e6",
+                "reference": "3132365e1430c091f208e120b8845d39c25f20e6",
                 "shasum": ""
             },
             "require": {
@@ -4134,7 +4137,7 @@
                 "myclabs/deep-copy": "~1.3",
                 "php": "^5.6 || ^7.0",
                 "phpspec/prophecy": "^1.3.1",
-                "phpunit/php-code-coverage": "^4.0",
+                "phpunit/php-code-coverage": "^4.0.1",
                 "phpunit/php-file-iterator": "~1.4",
                 "phpunit/php-text-template": "~1.2",
                 "phpunit/php-timer": "^1.0.6",
@@ -4187,7 +4190,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-06-16 06:01:15"
+            "time": "2016-07-26 14:48:00"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

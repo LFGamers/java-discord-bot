@@ -1,0 +1,13 @@
+```xl
+​      User: {{ member.user.username }}#{{ member.user.discriminator }}
+  Nickname: {{ member.nick|default("No Nickname") }}
+        ID: {{ member.user.id }}
+     Names: {{ dbUser.names|default("No other names")|join(',')}}
+    Avatar: {{ member.user.getAvatarAttribute() }}
+   Created: {{ created.diffForHumans() }} ({{ created.format('Y-m-d H:i:s') }})
+    Joined: {{ joined.diffForHumans() }} ({{ joined.format('Y-m-d H:i:s') }})
+ Last Seen: {{ lastSeen.diffForHumans() }} ({{ lastSeen.format('Y-m-d H:i:s') }})
+Last Spoke: {{ lastSpoke.diffForHumans() }} ({{ lastSpoke.format('Y-m-d H:i:s') }})
+     Roles: {{ roles|join(', ')}}, @​everyone
+{% if member.game.name is not empty %}   Playing: {{ member.game.name }}{% endif %}
+```
