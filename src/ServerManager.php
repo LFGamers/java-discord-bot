@@ -100,7 +100,6 @@ class ServerManager extends BaseServerManager
     public function onMemberUpdate(Member $member, Member $oldUser)
     {
         $type = null;
-        var_dump([$member->username, $oldUser->username, $member->nick, $oldUser->nick]);
         if ($member->username !== $oldUser->username) {
             $type = 'name';
 

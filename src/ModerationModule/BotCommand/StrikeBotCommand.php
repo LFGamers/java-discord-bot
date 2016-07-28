@@ -17,6 +17,7 @@ use Discord\Parts\Guild\Role;
 use Discord\Parts\User\Member;
 use Doctrine\ORM\ORMException;
 use LFGamers\Discord\AbstractBotCommand;
+use LFGamers\Discord\Helper\ModLogHelper;
 use LFGamers\Discord\Helper\RoleHelper;
 use LFGamers\Discord\Helper\UserHelper;
 use LFGamers\Discord\Model\Punishment;
@@ -137,18 +138,12 @@ EOF
 
                                 $request->reply(':thumbsup::skin-tone-2:');
 
-                                $event = ServerEvent::create(
-                                    $request->getServer(),
-                                    'moderation_action',
-                                    $strike,
-                                    $member
-                                );
-                                $this->container->get('event_dispatcher')->dispatch($event);
+                                ModLogHelper::postStrike($strike, $member);
                             }
                         )
                         ->otherwise(
                             function (\Exception $e) use ($request) {
-                                $this->logger->error($error->getTraceAsString());
+                                $this->logger->error($e->getTraceAsString());
                                 return $request->reply(
                                     ":thumbsdown::skin-tone-2: This server is not set up for strikes."
                                 );
