@@ -107,7 +107,6 @@ class ChannelHelper
             )
             ->otherwise(
                 function ($error) use ($deferred) {
-                    var_dump($error->getTraceAsString());
                     $deferred->reject($error);
                 }
             );

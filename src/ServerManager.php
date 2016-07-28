@@ -116,7 +116,6 @@ class ServerManager extends BaseServerManager
             return;
         }
 
-        var_dump($type, $member->nick, $member->username);
         if ($type === 'nick' && $member->nick === null) {
             return $this->logEvent(
                 sprintf(

@@ -86,7 +86,6 @@ EOF
         }
 
         $channel = $request->getServer()->channels->get('id', $user->getPrivateChannel()->getChannelId());
-        var_dump($channel);
     }
 
     protected function deletePrivateChannel(Request $request, array $matches)
