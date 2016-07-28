@@ -77,6 +77,10 @@ class BotReadyListener
         $this->ensurePermission('Staff', 'moderation.strike.view');
         $this->ensurePermission('Staff', 'moderation.strike.give');
 
+        // Purge
+        $this->ensurePermission('Staff', 'moderation.purge');
+        $this->ensurePermission('Owners', 'moderation.purge.all');
+
         // Mod Log Perms
         $this->ensurePermission('Staff', 'modlog.*');
 

@@ -1897,12 +1897,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/LFGamers/discord-base-bot.git",
-                "reference": "afe836a3551830210d0d98a6202db902a3c691b3"
+                "reference": "f052c79819ab505dfb606442666fd917e33d36c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/afe836a3551830210d0d98a6202db902a3c691b3",
-                "reference": "afe836a3551830210d0d98a6202db902a3c691b3",
+                "url": "https://api.github.com/repos/LFGamers/discord-base-bot/zipball/f052c79819ab505dfb606442666fd917e33d36c1",
+                "reference": "f052c79819ab505dfb606442666fd917e33d36c1",
                 "shasum": ""
             },
             "require": {
@@ -1941,7 +1941,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-07-27 19:43:44"
+            "time": "2016-07-28 08:18:16"
         },
         {
             "name": "monolog/monolog",
@@ -3404,12 +3404,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teamreflex/DiscordPHP.git",
-                "reference": "ab23a0ffcaafc56ae4d0a00af87d402884796ad0"
+                "reference": "1f98dbe6b88795a4514c78c9f5683cc772d837c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/ab23a0ffcaafc56ae4d0a00af87d402884796ad0",
-                "reference": "ab23a0ffcaafc56ae4d0a00af87d402884796ad0",
+                "url": "https://api.github.com/repos/teamreflex/DiscordPHP/zipball/1f98dbe6b88795a4514c78c9f5683cc772d837c5",
+                "reference": "1f98dbe6b88795a4514c78c9f5683cc772d837c5",
                 "shasum": ""
             },
             "require": {
@@ -3463,7 +3463,7 @@
                 }
             ],
             "description": "An unofficial API to interact with the voice and text service Discord.",
-            "time": "2016-07-27 19:02:34"
+            "time": "2016-07-28 05:01:15"
         },
         {
             "name": "twig/twig",

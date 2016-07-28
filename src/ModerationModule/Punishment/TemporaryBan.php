@@ -42,7 +42,13 @@ class TemporaryBan extends AbstractPunishment
     public function resolve(Strike $strike)
     {
         $guild = $this->getGuild($strike);
-        $ban   = $this->getBan($strike);
+
+        try {
+            $ban = $this->getBan($strike);
+        } catch (\Exception $e) {
+            return new FulfilledPromise();
+        }
+
         $guild->bans->delete($ban);
 
         return new FulfilledPromise();

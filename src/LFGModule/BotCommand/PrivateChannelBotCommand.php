@@ -201,12 +201,25 @@ EOF
         }
 
         $this->logger->info("Creating channel");
+
+        $name = 'Private - '.trim($matches['name']);
+        $name = preg_replace("/[^a-zA-Z0-9-_ ]+/", "", $name);
+
         /** @var Channel $channel */
         $channel = $this->discord->factory(
             Channel::class,
-            ['name' => 'Private - '.trim($matches['name']), 'type' => Channel::TYPE_VOICE]
+            ['name' => $name, 'type' => Channel::TYPE_VOICE]
         );
+
         $request->getServer()->channels->save($channel)
+            ->otherwise(function($error) use ($request) {
+                $this->logger->error($error->getMessage());
+                $this->logger->error($error->getTraceAsString());
+
+                return $request->reply(
+                    ":thumbsdown::skin-tone-2: Failed to create channel."
+                );
+            })
             ->then(
                 function (Channel $channel) use ($request, $matches, $user) {
                     $this->logger->info("Creating everyone perm");

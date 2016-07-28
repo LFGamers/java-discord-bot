@@ -148,7 +148,7 @@ EOF
                         )
                         ->otherwise(
                             function (\Exception $e) use ($request) {
-                                $this->logger->error($e->getMessage());
+                                $this->logger->error($error->getTraceAsString());
                                 return $request->reply(
                                     ":thumbsdown::skin-tone-2: This server is not set up for strikes."
                                 );
@@ -156,7 +156,7 @@ EOF
                         );
                 },
                 function ($error) use ($request) {
-                    $this->logger->error($error->getMessage());
+                    $this->logger->error($error->getTraceAsString());
                     $request->reply(":thumbsdown::skin-tone-2: Failed to punish user.");
                 }
             )

@@ -11,10 +11,11 @@
 
 namespace LFGamers\Discord\Helper;
 
-use Discord\Exceptions\PartRequestFailedException;
+use Discord\Helpers\Collection;
 use Discord\Parts\Channel\Channel;
-use Discord\Parts\Channel\Message;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use React\Promise\Deferred;
+use React\Promise\FulfilledPromise;
+use React\Promise\Promise;
 
 /**
  * @author Aaron Scherer <aequasi@gmail.com>
@@ -23,42 +24,94 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ChannelHelper
 {
-    public static function pruneChannel(Channel $channel, array $options = [])
-    {
-        /** @var Message[] $messages */
-        $messages = array_merge($channel->messages->toArray(), self::getChannelHistory($channel));
-        foreach ($messages as $message) {
-            try {
-                $message->delete();
-            } catch (PartRequestFailedException $e) {
-            }
-        }
-    }
-
     /**
      * @param Channel $channel
      * @param int     $limit
      * @param array   $messages
      *
-     * @return array|Message[]
+     * @return FulfilledPromise|Promise
      * @throws \Exception
      */
     public static function getChannelHistory(Channel $channel, $limit = 0, array $messages = [])
     {
-        $lastMessage = isset($messages[sizeof($messages) - 1]) ? $messages[sizeof($messages) - 1] : null;
+        $deferred = new Deferred();
 
-        $msgs = $channel->getMessageHistory(['limit' => 100, 'before' => $lastMessage]);
-        $messages = array_merge($messages, $msgs->toArray());
         if ($limit !== 0 && sizeof($messages) > $limit) {
             array_splice($messages, $limit);
 
-            return $messages;
+            return new FulfilledPromise($messages);
         }
 
-        if (sizeof($messages) < 100) {
-            return $messages;
+        $lastMessage = isset($messages[sizeof($messages) - 1]) ? $messages[sizeof($messages) - 1] : null;
+        $options     = ['limit' => 100];
+        if ($lastMessage !== null) {
+            $options['before'] = $lastMessage;
         }
 
-        return self::getChannelHistory($channel, $limit, $messages);
+        $channel->getMessageHistory($options)
+            ->then(
+                function (Collection $msgs) use ($channel, $limit, $messages, $deferred) {
+                    $messages = array_merge($messages, $msgs->toArray());
+
+                    if ($msgs->count() < 100) {
+                        return $deferred->resolve($messages);
+                    }
+
+                    static::getChannelHistory($channel, $limit, $messages)
+                        ->then(
+                            function ($messages) use ($deferred) {
+                                $deferred->resolve($messages);
+                            }
+                        )->otherwise(
+                            function () use ($messages, $deferred) {
+                                $deferred->resolve($messages);
+                            }
+                        );
+                }
+            )
+            ->otherwise(
+                function ($error) use ($deferred, $messages) {
+                    $deferred->resolve($messages);
+                }
+            );
+
+        return $deferred->promise();
+    }
+
+    public static function deleteMessages(Channel $channel, array $messages)
+    {
+        $deferred = new Deferred();
+
+        $msgs = array_splice($messages, 100);
+
+        $channel->deleteMessages($messages)
+            ->then(
+                function () use ($channel, $msgs, $deferred) {
+                    if (sizeof($msgs) <= 0) {
+                        return $deferred->resolve();
+                    }
+
+                    sleep(1);
+                    static::deleteMessages($channel, $msgs)
+                        ->then(
+                            function () use ($deferred) {
+                                $deferred->resolve();
+                            }
+                        )
+                        ->otherwise(
+                            function ($error) use ($deferred) {
+                                $deferred->reject($error);
+                            }
+                        );
+                }
+            )
+            ->otherwise(
+                function ($error) use ($deferred) {
+                    var_dump($error->getTraceAsString());
+                    $deferred->reject($error);
+                }
+            );
+
+        return $deferred->promise();
     }
 }
